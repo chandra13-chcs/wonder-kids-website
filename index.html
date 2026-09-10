@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wonder Kids High School | Khammam, Telangana</title>
-  <!-- Google Fonts: Cinzel & Plus Jakarta Sans -->
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons -->
@@ -15,14 +15,49 @@
   <style>
     html { scroll-behavior: smooth; }
     body { font-family: 'Plus Jakarta Sans', sans-serif; }
-    .font-serif-title { font-family: 'Cinzel', serif; }
+    .font-brand { font-family: 'Cinzel Decorative', serif; }
+    .font-heading { font-family: 'Playfair Display', serif; }
     .chat-scroll::-webkit-scrollbar { width: 4px; }
     .chat-scroll::-webkit-scrollbar-thumb { background: #d7c9b8; border-radius: 4px; }
   </style>
 </head>
 <body class="bg-[#FAF7F2] text-[#3D2C20] font-sans antialiased selection:bg-[#8C5D38] selection:text-white">
 
-  <!-- Top Info Bar: Khammam Pin, Ribbon & Mail -->
+  <!-- ADMISSIONS POPUP MODAL (Opens on page load) -->
+  <div id="admissionPopup" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+    <div class="bg-[#FAF7F2] rounded-3xl border border-[#DFCDB7] shadow-2xl max-w-md w-full p-6 relative animate-in fade-in zoom-in duration-300">
+      <button onclick="closeAdmissionPopup()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#EFE5D5] text-[#3D2C20] flex items-center justify-center hover:bg-[#DFCDB7] transition font-bold">
+        ✕
+      </button>
+
+      <div class="text-center space-y-3 pt-2">
+        <span class="inline-block px-3 py-1 rounded-full text-[11px] font-semibold bg-amber-500/20 text-[#A05C26] uppercase tracking-wider">
+          Admissions Open • 2026–2027
+        </span>
+        <h3 class="text-2xl font-heading font-bold text-[#26170E]">Enroll Your Child at Wonder Kids</h3>
+        <p class="text-xs text-[#614E40] leading-relaxed">
+          Applications are now being accepted from Nursery to Grade 10. Secure a priority campus tour and interaction slot with our senior academic mentors.
+        </p>
+
+        <div class="p-4 rounded-2xl bg-[#F5EFEB] border border-[#DFCDB7] text-left text-xs space-y-1.5">
+          <p class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[#A05C26]"></i> Safe GPS-enabled School Bus Transport</p>
+          <p class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[#A05C26]"></i> Dedicated Cricket, Football & Basketball Grounds</p>
+          <p class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[#A05C26]"></i> Smart Interactive Classrooms & STEM Labs</p>
+        </div>
+
+        <div class="pt-2 flex gap-3">
+          <a href="#admissions" onclick="closeAdmissionPopup()" class="flex-1 py-3 rounded-xl bg-[#663F24] hover:bg-[#4E2E18] text-white font-semibold text-xs transition text-center shadow-md">
+            Apply Online Now
+          </a>
+          <button onclick="closeAdmissionPopup()" class="px-4 py-3 rounded-xl bg-[#EFE5D5] text-[#473324] font-semibold text-xs hover:bg-[#E5D7C2] transition">
+            Browse Site
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top Info Bar: Khammam Pin, Ribbon, Mail & Language Toggle -->
   <div class="bg-[#2D1B10] text-[#E8DCCB] text-xs py-2 px-6 border-b border-[#442B1A]">
     <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2">
       <div class="flex items-center gap-2">
@@ -34,11 +69,20 @@
         <i data-lucide="award" class="w-3 h-3"></i> Admissions Open 2026-27 • Nursery to Grade X
       </div>
 
-      <div class="flex items-center gap-2">
-        <i data-lucide="mail" class="w-3.5 h-3.5 text-[#E6A052]"></i>
-        <a href="mailto:info@wonderkidskhammam.edu.in" class="hover:text-white transition font-medium">
-          info@wonderkidskhammam.edu.in
+      <div class="flex items-center gap-4">
+        <a href="mailto:info@wonderkidskhammam.edu.in" class="hover:text-white transition font-medium hidden sm:inline-flex items-center gap-1.5">
+          <i data-lucide="mail" class="w-3.5 h-3.5 text-[#E6A052]"></i> info@wonderkidskhammam.edu.in
         </a>
+
+        <!-- English / Telugu Language Switcher -->
+        <div class="inline-flex items-center bg-[#442B1A] rounded-lg p-0.5 border border-[#5C3820]">
+          <button id="langEnBtn" onclick="setLanguage('en')" class="px-2 py-0.5 rounded text-[11px] font-semibold bg-[#FAF7F2] text-[#2D1B10] transition">
+            EN
+          </button>
+          <button id="langTeBtn" onclick="setLanguage('te')" class="px-2 py-0.5 rounded text-[11px] font-semibold text-[#E8DCCB] hover:text-white transition">
+            తెలుగు
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -47,27 +91,28 @@
   <header class="sticky top-0 z-40 bg-[#FAF7F2]/95 backdrop-blur-md border-b border-[#E8DFC9] shadow-sm">
     <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#663F24] to-[#3A2415] flex items-center justify-center text-[#FAF7F2] font-serif-title text-xl shadow-md border border-[#8C5D38]/30">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#663F24] to-[#3A2415] flex items-center justify-center text-[#FAF7F2] font-brand text-2xl shadow-md border border-[#8C5D38]/30">
           W
         </div>
         <div>
-          <span class="font-serif-title text-xl font-semibold text-[#2F1E13] tracking-wider block leading-tight">
-            Wonder Kids
+          <!-- Distinct Brand Heading Font -->
+          <span class="font-brand text-lg tracking-wider text-[#2F1E13] block leading-tight">
+            WONDER KIDS
           </span>
-          <span class="text-[10px] font-medium text-[#A6632B] tracking-[0.2em] uppercase block">
+          <span class="text-[10px] font-medium text-[#A6632B] tracking-[0.25em] uppercase block">
             High School • Khammam
           </span>
         </div>
       </div>
 
       <nav class="hidden lg:flex items-center space-x-7 text-sm font-medium text-[#664E3D]">
-        <a href="#vision" class="hover:text-[#2F1E13] transition">Vision</a>
-        <a href="#faculty-activities" class="hover:text-[#2F1E13] transition">Faculty</a>
-        <a href="#sports" class="hover:text-[#2F1E13] transition">Sports</a>
-        <a href="#transport" class="hover:text-[#2F1E13] transition">Bus Facility</a>
-        <a href="#campus" class="hover:text-[#2F1E13] transition">Campus</a>
-        <a href="#notices" class="hover:text-[#2F1E13] transition">Notices</a>
-        <a href="#contact-us" class="hover:text-[#2F1E13] transition">Contact</a>
+        <a href="#vision" class="hover:text-[#2F1E13] transition" data-i18n="nav_vision">Vision</a>
+        <a href="#faculty-activities" class="hover:text-[#2F1E13] transition" data-i18n="nav_faculty">Faculty</a>
+        <a href="#sports" class="hover:text-[#2F1E13] transition" data-i18n="nav_sports">Sports</a>
+        <a href="#transport" class="hover:text-[#2F1E13] transition" data-i18n="nav_bus">Bus Fleet</a>
+        <a href="#campus" class="hover:text-[#2F1E13] transition" data-i18n="nav_campus">Campus</a>
+        <a href="#notices" class="hover:text-[#2F1E13] transition" data-i18n="nav_notices">Notice Board</a>
+        <a href="#contact-us" class="hover:text-[#2F1E13] transition" data-i18n="nav_contact">Contact</a>
       </nav>
 
       <div class="flex items-center gap-3">
@@ -81,22 +126,22 @@
     </div>
   </header>
 
-  <!-- HERO SECTION (PROPORTIONAL, NO AWKWARD CROPS) -->
-  <section class="pt-8 pb-16 px-6 max-w-6xl mx-auto">
+  <!-- Hero Section -->
+  <section class="pt-10 pb-16 px-6 max-w-6xl mx-auto">
     <div class="grid lg:grid-cols-12 gap-8 items-center">
       
-      <!-- Left Content (Col 7) -->
+      <!-- Text (Col 7) -->
       <div class="lg:col-span-7 space-y-5">
         <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-semibold bg-[#EFE4D2] text-[#6A4321] border border-[#D9C4A9]">
           <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#C46816]"></i> Quality Foundational Education
         </div>
         
-        <h1 class="text-3xl sm:text-5xl font-serif-title font-semibold text-[#26170E] tracking-tight leading-tight">
-          Nurturing Curious Minds into <span class="text-[#A05C26]">Future Leaders</span>
+        <h1 class="text-3xl sm:text-5xl font-heading font-bold text-[#26170E] tracking-tight leading-tight" data-i18n="hero_title">
+          Nurturing Curious Minds into <span class="text-[#A05C26] italic">Future Leaders</span>
         </h1>
         
-        <p class="text-sm sm:text-base text-[#614E40] leading-relaxed max-w-xl">
-          Wonder Kids High School, Khammam lo holistic learning, smart digital classrooms, sports excellence mariyu core moral values tho student journey ni empower chestham.
+        <p class="text-sm sm:text-base text-[#614E40] leading-relaxed max-w-xl" data-i18n="hero_desc">
+          Empowering children through holistic academic excellence, smart audio-visual learning, structured sports coaching, and strong ethical values in Khammam.
         </p>
 
         <div class="flex flex-wrap gap-4 pt-2">
@@ -108,24 +153,24 @@
           </button>
         </div>
 
-        <!-- Metrics Strip -->
+        <!-- Metric Counters (Replaced Fit Body with Holistic Sports) -->
         <div class="grid grid-cols-3 gap-4 pt-6 border-t border-[#E3D4BF] text-center sm:text-left max-w-lg">
           <div>
-            <span class="text-xl sm:text-2xl font-serif-title font-semibold text-[#382315]">100%</span>
-            <p class="text-[11px] text-[#7A6453]">SSC Pass Record</p>
+            <span class="text-xl sm:text-2xl font-heading font-bold text-[#382315]">100%</span>
+            <p class="text-[11px] text-[#7A6453]">SSC Board Record</p>
           </div>
           <div>
-            <span class="text-xl sm:text-2xl font-serif-title font-semibold text-[#382315]">10+ Yrs</span>
-            <p class="text-[11px] text-[#7A6453]">Expert Faculty</p>
+            <span class="text-xl sm:text-2xl font-heading font-bold text-[#382315]">10+ Yrs</span>
+            <p class="text-[11px] text-[#7A6453]">Senior Mentors</p>
           </div>
           <div>
-            <span class="text-xl sm:text-2xl font-serif-title font-semibold text-[#382315]">Fit Body</span>
-            <p class="text-[11px] text-[#7A6453]">Cricket & Football</p>
+            <span class="text-xl sm:text-2xl font-heading font-bold text-[#382315]">Holistic</span>
+            <p class="text-[11px] text-[#7A6453]">Sports & Fitness</p>
           </div>
         </div>
       </div>
 
-      <!-- Right Visual (Col 5) - Full Natural Frame of Student -->
+      <!-- Right Visual (Col 5) -->
       <div class="lg:col-span-5 flex flex-col items-center gap-4">
         <div class="relative w-full max-w-sm rounded-3xl overflow-hidden border-2 border-[#D5C2A8] shadow-xl bg-[#E8DCB8]">
           <img 
@@ -142,15 +187,14 @@
           </div>
         </div>
 
-        <!-- Sleek Minimized AI Desk Bar -->
         <div class="w-full max-w-sm bg-[#2D1B10] p-3.5 rounded-2xl border border-[#5C3820] shadow-md flex items-center justify-between gap-3 text-[#FAF7F2]">
           <div class="flex items-center gap-3">
             <div class="w-9 h-9 rounded-xl bg-[#DDA15E] text-[#29170C] flex items-center justify-center shrink-0">
               <i data-lucide="bot" class="w-4 h-4"></i>
             </div>
             <div>
-              <h4 class="text-xs font-semibold text-white">Parent AI Desk</h4>
-              <p class="text-[10px] text-[#CBB8A5]">Instant fees, bus & timings assistance</p>
+              <h4 class="text-xs font-semibold text-white">Parent AI Helpdesk</h4>
+              <p class="text-[10px] text-[#CBB8A5]">Instant fees, bus & curriculum guidance</p>
             </div>
           </div>
           <button onclick="toggleChat()" class="px-3 py-1.5 rounded-lg bg-[#FAF7F2] text-[#3D2313] font-semibold text-xs hover:bg-[#E8DCB8] transition">
@@ -181,7 +225,7 @@
             <span class="w-6 h-[1.5px] bg-[#A05C26]"></span> FROM THE PRESIDENT'S INSPIRATION
           </div>
           
-          <h2 class="text-2xl md:text-3xl font-serif-title font-semibold text-[#26170E] leading-snug">
+          <h2 class="text-2xl md:text-3xl font-heading font-bold text-[#26170E] leading-snug" data-i18n="vision_title">
             A Vision for Every Wonder Kid
           </h2>
           
@@ -189,14 +233,14 @@
             "Every child carries a spark. Our work is to give it room, rigour and warmth — so it becomes a flame the world can see."
           </blockquote>
 
-          <p class="text-sm text-[#614E40] leading-relaxed">
-            Wonder Kids High School, Khammam inspires every child with Dr. Kalam's core philosophy: learning gives creativity, creativity leads to thinking, and thinking provides knowledge. We ensure students leave not just with marks, but with character, confidence, and grace.
+          <p class="text-sm text-[#614E40] leading-relaxed" data-i18n="vision_desc">
+            Guided by Dr. A. P. J. Abdul Kalam's educational ideals, Wonder Kids High School nurtures curiosity into structured thinking and practical innovation. We ensure students leave our campus equipped with strong moral values, academic confidence, and creative leadership skills.
           </p>
 
           <div class="pt-4 border-t border-[#DFCDB7] flex items-center justify-between">
             <div>
-              <h4 class="text-base font-serif-title font-semibold text-[#2A180E]">Dr. A. P. J. Abdul Kalam</h4>
-              <p class="text-xs text-[#A05C26]">Visionary • Teacher • People's President</p>
+              <h4 class="text-base font-heading font-bold text-[#2A180E]">Dr. A. P. J. Abdul Kalam</h4>
+              <p class="text-xs text-[#A05C26]">Visionary • Teacher • 11th President of India</p>
             </div>
           </div>
         </div>
@@ -210,16 +254,16 @@
       <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#A05C26] mb-2">
         <span class="w-6 h-[1.5px] bg-[#A05C26]"></span> EXPERT CARE & JOYFUL LEARNING
       </div>
-      <h2 class="text-3xl md:text-4xl font-serif-title font-semibold text-[#26170E]">
-        Guided by Decades of Experience, Inspired by Fun
+      <h2 class="text-3xl md:text-4xl font-heading font-bold text-[#26170E]">
+        Guided by Decades of Experience, Inspired by Joy
       </h2>
       <p class="text-sm text-[#614E40] mt-2 leading-relaxed">
-        Wonder Kids High School lo chaduvu ante bhayam kadhu, oka anandam! Experienced teachers guidance and stress-free creative games tho biddalu happy ga nerchukuntaru.
+        Learning at Wonder Kids High School is an engaging, positive journey where experienced subject mentors meet playful discovery.
       </p>
     </div>
 
     <div class="grid md:grid-cols-2 gap-8">
-      <!-- 10+ Years Faculty Card with faculty.jfif -->
+      <!-- 10+ Years Faculty Card -->
       <div class="bg-[#F5EFEB] rounded-3xl overflow-hidden border border-[#DFCDB7] shadow-sm flex flex-col justify-between">
         <div>
           <div class="w-full h-64 overflow-hidden relative bg-[#E8DCB8]">
@@ -229,24 +273,24 @@
               class="w-full h-full object-cover object-center"
             />
             <div class="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-medium bg-[#26170E]/85 text-[#FAF7F2] backdrop-blur-sm flex items-center gap-1.5">
-              <i data-lucide="graduation-cap" class="w-3.5 h-3.5 text-[#E6A052]"></i> 10+ Years Proven Mastery
+              <i data-lucide="graduation-cap" class="w-3.5 h-3.5 text-[#E6A052]"></i> 10+ Years Teaching Mastery
             </div>
           </div>
           <div class="p-7">
-            <h3 class="text-xl font-serif-title font-semibold text-[#26170E] mb-2">
-              Senior & Certified Mentors
+            <h3 class="text-xl font-heading font-bold text-[#26170E] mb-2">
+              Senior & Certified Educators
             </h3>
             <p class="text-sm text-[#614E40] leading-relaxed mb-4">
-              Maa school staff lo majority teachers 10+ years teaching experience unna subject experts. State board SSC pattern, foundational maths, and English communication ni chala patience tho explain chestharu.
+              Our faculty features subject experts with over a decade of dedicated classroom experience. They simplify difficult math formulas, state board curricula, and language proficiency with patience and clarity.
             </p>
             <div class="space-y-2 text-xs text-[#7A6453]">
               <div class="flex items-center gap-2">
                 <i data-lucide="check-circle" class="w-4 h-4 text-[#A05C26]"></i>
-                <span>One-on-one doubt clarification sessions</span>
+                <span>One-on-one personal remedial sessions</span>
               </div>
               <div class="flex items-center gap-2">
                 <i data-lucide="check-circle" class="w-4 h-4 text-[#A05C26]"></i>
-                <span>Regular parent-teacher mentorship feedback</span>
+                <span>Structured continuous parent mentorship reviews</span>
               </div>
             </div>
           </div>
@@ -257,7 +301,7 @@
         </div>
       </div>
 
-      <!-- Play-Way Activities with activities.jfif -->
+      <!-- Play-Way Activities -->
       <div class="bg-[#F5EFEB] rounded-3xl overflow-hidden border border-[#DFCDB7] shadow-sm flex flex-col justify-between">
         <div>
           <div class="w-full h-64 overflow-hidden relative bg-[#E8DCB8]">
@@ -271,26 +315,26 @@
             </div>
           </div>
           <div class="p-7">
-            <h3 class="text-xl font-serif-title font-semibold text-[#26170E] mb-2">
-              Play-Way & Hands-On Activities
+            <h3 class="text-xl font-heading font-bold text-[#26170E] mb-2">
+              Play-Way & Hands-On Discovery
             </h3>
             <p class="text-sm text-[#614E40] leading-relaxed mb-4">
-              Building blocks, storytelling, interactive puzzles, art & craft, and role play! Small kids physical blocks and creative brain games dwara motor skills and social friendship build chestham.
+              Building blocks, storytelling, interactive puzzles, and creative crafts replace passive screen-time. Young learners build strong fine motor skills, teamwork, and genuine curiosity from day one.
             </p>
             <div class="space-y-2 text-xs text-[#7A6453]">
               <div class="flex items-center gap-2">
                 <i data-lucide="check-circle" class="w-4 h-4 text-[#A05C26]"></i>
-                <span>Zero stress learning environment</span>
+                <span>Zero-stress experiential learning environment</span>
               </div>
               <div class="flex items-center gap-2">
                 <i data-lucide="check-circle" class="w-4 h-4 text-[#A05C26]"></i>
-                <span>Creative thinking & puzzle solving days</span>
+                <span>Brain games and sensory problem-solving days</span>
               </div>
             </div>
           </div>
         </div>
         <div class="p-5 bg-[#EFE5D5] border-t border-[#DFCDB7] flex items-center justify-between text-xs font-semibold text-[#663F24]">
-          <span>Happy Childhood Memories</span>
+          <span>Enriching Childhood Experiences</span>
           <i data-lucide="smile" class="w-4 h-4"></i>
         </div>
       </div>
@@ -303,11 +347,11 @@
       <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#A05C26] mb-2">
         <span class="w-6 h-[1.5px] bg-[#A05C26]"></span> BEYOND THE CLASSROOM
       </div>
-      <h2 class="text-3xl md:text-4xl font-serif-title font-semibold text-[#26170E]">
+      <h2 class="text-3xl md:text-4xl font-heading font-bold text-[#26170E]">
         Not Just Mentally, Physically Fit Too
       </h2>
       <p class="text-sm text-[#614E40] mt-2 leading-relaxed">
-        Pusthakala chaduvuthone aagipokunda, prathi student physical ga strong ga undela daily sports coaching & ground training untundi.
+        Academic excellence must be matched by physical health and stamina. Wonder Kids provides daily sports coaching, disciplined fitness routines, and inter-school tournament training.
       </p>
     </div>
 
@@ -326,9 +370,9 @@
             </span>
           </div>
           <div class="p-6">
-            <h3 class="text-lg font-serif-title font-semibold text-[#26170E] mb-1.5">Cricket Academy & Nets</h3>
+            <h3 class="text-lg font-heading font-bold text-[#26170E] mb-1.5">Cricket Academy & Nets</h3>
             <p class="text-xs text-[#614E40] leading-relaxed">
-              Batting technique, bowling rhythm, and fielding drills. Inter-school tournament matches kosam students ni train chestham.
+              Dedicated batting techniques, bowling action corrections, and fielding agility drills for competitive tournament readiness.
             </p>
           </div>
         </div>
@@ -352,14 +396,14 @@
             </span>
           </div>
           <div class="p-6">
-            <h3 class="text-lg font-serif-title font-semibold text-[#26170E] mb-1.5">Football & Agility Drills</h3>
+            <h3 class="text-lg font-heading font-bold text-[#26170E] mb-1.5">Football & Agility Training</h3>
             <p class="text-xs text-[#614E40] leading-relaxed">
-              Dribbling, ball coordination, and cardio stamina. Biddalalo teamwork, quick decision making enhance chesthundi.
+              Dribbling, tactical passing, cardiovascular endurance, and true team collaboration built directly on the field.
             </p>
           </div>
         </div>
         <div class="px-6 pb-5 pt-2 border-t border-[#DECBB6]/60 flex items-center justify-between text-xs text-[#8C5D38] font-semibold">
-          <span>Cardio & Team Spirit</span>
+          <span>Cardio & Team Coordination</span>
           <i data-lucide="activity" class="w-4 h-4 text-[#A05C26]"></i>
         </div>
       </div>
@@ -378,25 +422,24 @@
             </span>
           </div>
           <div class="p-6">
-            <h3 class="text-lg font-serif-title font-semibold text-[#26170E] mb-1.5">Basketball Court</h3>
+            <h3 class="text-lg font-heading font-bold text-[#26170E] mb-1.5">Basketball Court</h3>
             <p class="text-xs text-[#614E40] leading-relaxed">
-              Standard outdoor court with certified safety rings. Height growth, shooting accuracy, jumping power build avthundi.
+              Certified full outdoor court with regulation rings. Helps develop jumping power, height progression, and split-second focus.
             </p>
           </div>
         </div>
         <div class="px-6 pb-5 pt-2 border-t border-[#DECBB6]/60 flex items-center justify-between text-xs text-[#8C5D38] font-semibold">
-          <span>Height & Coordination</span>
+          <span>Speed & Hand-Eye Coordination</span>
           <i data-lucide="zap" class="w-4 h-4 text-[#A05C26]"></i>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 4. BUS TRANSPORT (YELLOW BUS PHOTO FIT PROPERLY) -->
+  <!-- 4. BUS TRANSPORT -->
   <section id="transport" class="py-16 px-6 max-w-6xl mx-auto">
     <div class="bg-[#F5EFEB] border border-[#DFCDB7] rounded-3xl p-8 md:p-12 shadow-md">
       <div class="grid md:grid-cols-12 gap-8 items-center">
-        <!-- Bus photo framed properly without extreme cutting -->
         <div class="md:col-span-5 flex justify-center">
           <div class="w-full max-w-sm rounded-2xl overflow-hidden border-2 border-[#D5C2A8] shadow-lg bg-[#E8DCB8]">
             <img 
@@ -412,12 +455,12 @@
             <span class="w-6 h-[1.5px] bg-[#A05C26]"></span> SAFE & RELIABLE COMMUTE
           </div>
           
-          <h2 class="text-2xl md:text-3xl font-serif-title font-semibold text-[#26170E] leading-snug">
+          <h2 class="text-2xl md:text-3xl font-heading font-bold text-[#26170E] leading-snug">
             Safe School Bus Fleet Across Khammam
           </h2>
           
           <p class="text-sm text-[#614E40] leading-relaxed">
-            Parents ki daily tension lekunda, biddalu safe ga school ki vachi vellela dedicated bus facility provide chesthunnam. Experienced drivers, caring lady attendants, and verified routes.
+            Giving parents complete peace of mind with disciplined, safe school commute. Our verified transport fleet features trained drivers and female bus attendants on all routes.
           </p>
 
           <div class="grid sm:grid-cols-2 gap-3.5 pt-2 text-xs text-[#523C2D]">
@@ -425,23 +468,23 @@
               <i data-lucide="shield-check" class="w-4 h-4 text-emerald-700 shrink-0 mt-0.5"></i>
               <div>
                 <p class="font-semibold text-[#28180E]">Trained Lady Attendants</p>
-                <p class="text-[11px] text-[#7A6453]">Caring support in every bus</p>
+                <p class="text-[11px] text-[#7A6453]">Caring support during boarding & drop</p>
               </div>
             </div>
 
             <div class="p-3 rounded-xl bg-[#EFE5D5] border border-[#DFCDB7] flex items-start gap-2.5">
               <i data-lucide="navigation" class="w-4 h-4 text-[#A05C26] shrink-0 mt-0.5"></i>
               <div>
-                <p class="font-semibold text-[#28180E]">Khammam Wide Routes</p>
-                <p class="text-[11px] text-[#7A6453]">Wyra Road, Mamillagudem, Kaman</p>
+                <p class="font-semibold text-[#28180E]">Khammam Wide Coverage</p>
+                <p class="text-[11px] text-[#7A6453]">Wyra Road, Mamillagudem, Kaman & more</p>
               </div>
             </div>
 
             <div class="p-3 rounded-xl bg-[#EFE5D5] border border-[#DFCDB7] flex items-start gap-2.5">
               <i data-lucide="clock" class="w-4 h-4 text-[#A05C26] shrink-0 mt-0.5"></i>
               <div>
-                <p class="font-semibold text-[#28180E]">Punctual Pickups</p>
-                <p class="text-[11px] text-[#7A6453]">On-time morning arrival</p>
+                <p class="font-semibold text-[#28180E]">Punctual Morning Pickups</p>
+                <p class="text-[11px] text-[#7A6453]">Timely school arrival every single day</p>
               </div>
             </div>
 
@@ -449,7 +492,7 @@
               <i data-lucide="video" class="w-4 h-4 text-emerald-700 shrink-0 mt-0.5"></i>
               <div>
                 <p class="font-semibold text-[#28180E]">First-Aid Equipped</p>
-                <p class="text-[11px] text-[#7A6453]">Safety protocols verified</p>
+                <p class="text-[11px] text-[#7A6453]">Standard medical protocols verified</p>
               </div>
             </div>
           </div>
@@ -465,50 +508,49 @@
         <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-amber-400 mb-2">
           <span class="w-6 h-[1.5px] bg-amber-400"></span> WHY CHOOSE US
         </div>
-        <h2 class="text-3xl md:text-4xl font-serif-title font-semibold text-white">Four Commitments, One Campus</h2>
+        <h2 class="text-3xl md:text-4xl font-heading font-bold text-white">Four Commitments, One Campus</h2>
         <p class="text-slate-400 text-sm mt-2">
-          Everything at Wonder Kids is designed around four simple promises we make to every family in Khammam.
+          Everything at Wonder Kids is built around four fundamental promises we make to every family in Khammam.
         </p>
       </div>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <div class="p-6 rounded-2xl bg-[#1E2B3D] border border-slate-700/60">
-          <span class="font-serif-title text-3xl text-amber-400/80 block mb-3">01</span>
-          <h3 class="text-base font-serif-title font-semibold text-white mb-2">Academic Depth</h3>
+          <span class="font-heading text-3xl text-amber-400/80 block mb-3">01</span>
+          <h3 class="text-base font-heading font-bold text-white mb-2">Academic Depth</h3>
           <p class="text-xs text-slate-300 leading-relaxed">Concept-first teaching and structured remediation keep every learner moving forward.</p>
         </div>
         <div class="p-6 rounded-2xl bg-[#1E2B3D] border border-slate-700/60">
-          <span class="font-serif-title text-3xl text-amber-400/80 block mb-3">02</span>
-          <h3 class="text-base font-serif-title font-semibold text-white mb-2">Character & Care</h3>
+          <span class="font-heading text-3xl text-amber-400/80 block mb-3">02</span>
+          <h3 class="text-base font-heading font-bold text-white mb-2">Character & Care</h3>
           <p class="text-xs text-slate-300 leading-relaxed">Dedicated student mentoring, moral values, and emotional well-being attention.</p>
         </div>
         <div class="p-6 rounded-2xl bg-[#1E2B3D] border border-slate-700/60">
-          <span class="font-serif-title text-3xl text-amber-400/80 block mb-3">03</span>
-          <h3 class="text-base font-serif-title font-semibold text-white mb-2">Sport & Stage</h3>
+          <span class="font-heading text-3xl text-amber-400/80 block mb-3">03</span>
+          <h3 class="text-base font-heading font-bold text-white mb-2">Sport & Stage</h3>
           <p class="text-xs text-slate-300 leading-relaxed">Cricket, football, basketball courts, and speech & debate talent platforms.</p>
         </div>
         <div class="p-6 rounded-2xl bg-[#1E2B3D] border border-slate-700/60">
-          <span class="font-serif-title text-3xl text-amber-400/80 block mb-3">04</span>
-          <h3 class="text-base font-serif-title font-semibold text-white mb-2">Future Ready</h3>
+          <span class="font-heading text-3xl text-amber-400/80 block mb-3">04</span>
+          <h3 class="text-base font-heading font-bold text-white mb-2">Future Ready</h3>
           <p class="text-xs text-slate-300 leading-relaxed">Practical computer lab learning, modern analytical thinking from early grades.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 6. CAMPUS SHOWCASE (SCHOOL BUILDING PHOTO IN NATURAL 16:9 RATIO) -->
+  <!-- 6. CAMPUS SHOWCASE -->
   <section id="campus" class="py-16 px-6 max-w-6xl mx-auto">
     <div class="max-w-2xl mb-10">
       <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#A05C26] mb-2">
         <span class="w-6 h-[1.5px] bg-[#A05C26]"></span> CAMPUS & INFRASTRUCTURE
       </div>
-      <h2 class="text-3xl md:text-4xl font-serif-title font-semibold text-[#26170E]">A Campus Built for Curiosity</h2>
+      <h2 class="text-3xl md:text-4xl font-heading font-bold text-[#26170E]">A Campus Built for Curiosity</h2>
       <p class="text-slate-600 text-sm mt-1">
         Dedicated learning spaces in the heart of Khammam — engineered for safety, light, and play.
       </p>
     </div>
 
-    <!-- Clean Campus Card with School Building Photo -->
     <div class="bg-[#F5EFEB] rounded-3xl overflow-hidden border border-[#DFCDB7] shadow-sm">
       <div class="w-full h-80 sm:h-[400px] overflow-hidden bg-[#E8DCB8]">
         <img 
@@ -519,16 +561,16 @@
       </div>
       <div class="p-8 grid md:grid-cols-3 gap-6">
         <div>
-          <h3 class="text-lg font-serif-title font-semibold text-[#26170E] mb-1">Spacious Grounds</h3>
-          <p class="text-xs text-[#614E40] leading-relaxed">Lush green courtyard, well-ventilated campus, and clear play zones for elementary kids.</p>
+          <h3 class="text-lg font-heading font-bold text-[#26170E] mb-1">Spacious Grounds</h3>
+          <p class="text-xs text-[#614E40] leading-relaxed">Lush courtyard, well-ventilated corridors, and dedicated open-air play areas for kids.</p>
         </div>
         <div>
-          <h3 class="text-lg font-serif-title font-semibold text-[#26170E] mb-1">Modern Audio-Visual</h3>
+          <h3 class="text-lg font-heading font-bold text-[#26170E] mb-1">Modern Audio-Visual</h3>
           <p class="text-xs text-[#614E40] leading-relaxed">Interactive smart displays in every classroom to make complex science and math simple.</p>
         </div>
         <div>
-          <h3 class="text-lg font-serif-title font-semibold text-[#26170E] mb-1">Safe Environment</h3>
-          <p class="text-xs text-[#614E40] leading-relaxed">24/7 CCTV surveillance, purified RO water stations, and clean hygiene standards.</p>
+          <h3 class="text-lg font-heading font-bold text-[#26170E] mb-1">Safe Environment</h3>
+          <p class="text-xs text-[#614E40] leading-relaxed">24/7 CCTV surveillance, purified RO drinking water, and high hygiene standards.</p>
         </div>
       </div>
     </div>
@@ -541,7 +583,7 @@
         <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#A05C26] mb-2">
           <span class="w-6 h-[1.5px] bg-[#A05C26]"></span> LATEST UPDATES
         </div>
-        <h2 class="text-3xl font-serif-title font-semibold text-[#26170E]">From the Notice Board</h2>
+        <h2 class="text-3xl font-heading font-bold text-[#26170E]">From the Notice Board</h2>
       </div>
 
       <div class="grid md:grid-cols-3 gap-6">
@@ -550,8 +592,8 @@
             <span class="inline-block px-3 py-1 rounded-md text-[11px] font-semibold bg-[#E8DCB8] text-[#6A4321] uppercase tracking-wider mb-3">
               ADMISSIONS
             </span>
-            <h3 class="text-base font-serif-title font-semibold text-[#26170E] mb-2">Admissions Open 2026–27</h3>
-            <p class="text-xs text-[#8C5D38] font-medium mb-3">Academic Desk</p>
+            <h3 class="text-base font-heading font-bold text-[#26170E] mb-2">Admissions Open 2026–27</h3>
+            <p class="text-xs text-[#8C5D38] font-medium mb-3">Academic Cell</p>
             <p class="text-xs text-[#614E40] leading-relaxed">
               Applications are now invited for Pre-Primary to Grade 10. Limited seats per section.
             </p>
@@ -566,7 +608,7 @@
             <span class="inline-block px-3 py-1 rounded-md text-[11px] font-semibold bg-[#E8DCB8] text-[#6A4321] uppercase tracking-wider mb-3">
               SPORTS & BUS
             </span>
-            <h3 class="text-base font-serif-title font-semibold text-[#26170E] mb-2">Bus Routes & Practice Schedule</h3>
+            <h3 class="text-base font-heading font-bold text-[#26170E] mb-2">Bus Routes & Training Timetable</h3>
             <p class="text-xs text-[#8C5D38] font-medium mb-3">Sports Cell</p>
             <p class="text-xs text-[#614E40] leading-relaxed">
               New pickup stops added across Khammam. Evening cricket & football coaching batches commence.
@@ -582,7 +624,7 @@
             <span class="inline-block px-3 py-1 rounded-md text-[11px] font-semibold bg-[#E8DCB8] text-[#6A4321] uppercase tracking-wider mb-3">
               ACADEMICS
             </span>
-            <h3 class="text-base font-serif-title font-semibold text-[#26170E] mb-2">SSC Board Guidance</h3>
+            <h3 class="text-base font-heading font-bold text-[#26170E] mb-2">SSC Board Guidance</h3>
             <p class="text-xs text-[#8C5D38] font-medium mb-3">Term II Mentorship</p>
             <p class="text-xs text-[#614E40] leading-relaxed">
               Special doubt sessions guided by our 10+ years experienced faculty for high school students.
@@ -601,7 +643,7 @@
     <div class="bg-[#F5EFEB] border border-[#DFCDB7] rounded-3xl p-8 md:p-10 shadow-lg">
       <div class="text-center mb-8">
         <span class="text-xs font-semibold uppercase tracking-wider text-[#A05C26]">Enrolment 2026-27</span>
-        <h2 class="text-2xl md:text-3xl font-serif-title font-semibold text-[#26170E] mt-1">Admission Registration</h2>
+        <h2 class="text-2xl md:text-3xl font-heading font-bold text-[#26170E] mt-1">Admission Registration</h2>
         <p class="text-xs text-[#7A6453] mt-1">Submit your details to request an interactive campus walkthrough and assessment.</p>
       </div>
 
@@ -650,14 +692,14 @@
   <section id="contact-us" class="py-16 px-6 max-w-6xl mx-auto">
     <div class="text-center max-w-2xl mx-auto mb-10">
       <span class="text-xs font-semibold uppercase tracking-wider text-[#A05C26]">Locate Us</span>
-      <h2 class="text-3xl font-serif-title font-semibold text-[#26170E] mt-1">Campus & Location</h2>
+      <h2 class="text-3xl font-heading font-bold text-[#26170E] mt-1">Campus & Location</h2>
       <p class="text-sm text-[#735E4E] mt-1">Centrally situated in Khammam Urban, Telangana.</p>
     </div>
 
     <div class="grid md:grid-cols-2 gap-8 items-start">
       <div class="bg-[#F5EFEB] border border-[#DFCDB7] rounded-3xl p-8 space-y-6">
         <div>
-          <h3 class="text-xl font-serif-title font-semibold text-[#2A180E] mb-4">Wonder Kids High School</h3>
+          <h3 class="text-xl font-heading font-bold text-[#2A180E] mb-4">Wonder Kids High School</h3>
           <div class="space-y-3 text-sm text-[#5B4739]">
             <div class="flex items-start gap-3">
               <i data-lucide="map-pin" class="w-5 h-5 text-[#9C5A25] shrink-0 mt-0.5"></i>
@@ -707,15 +749,15 @@
     </div>
   </section>
 
-  <!-- Footer -->
+  <!-- Footer with snātak.dev attribution -->
   <footer class="bg-[#29170C] text-[#D8C7B5] py-14 px-6 border-t border-[#3D2313]">
     <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
       <div>
-        <h4 class="text-white font-serif-title font-semibold text-lg">Wonder Kids High School</h4>
+        <h4 class="text-white font-brand text-base tracking-wider">WONDER KIDS HIGH SCHOOL</h4>
         <p class="text-xs text-[#A89481] mt-1">Khammam, Telangana — 507001</p>
       </div>
       <p class="text-xs text-[#8A7665]">
-        Designed & Maintained by <strong class="text-[#E8A359]">snantak.dev</strong>
+        Designed & Built by <strong class="text-[#E8A359]">snātak.dev</strong>
       </p>
     </div>
   </footer>
@@ -733,7 +775,7 @@
             <i data-lucide="sparkles" class="w-4 h-4 text-[#E6A052]"></i>
           </div>
           <div>
-            <h4 class="text-sm font-semibold">WonderKids AI Assistant</h4>
+            <h4 class="text-sm font-semibold">WonderKids AI Helpdesk</h4>
             <span class="text-[10px] text-[#C4B29E] flex items-center gap-1">
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Online • Khammam
             </span>
@@ -746,18 +788,18 @@
         <div class="flex gap-2">
           <div class="w-6 h-6 rounded-full bg-[#663F24] text-white flex items-center justify-center text-[10px] shrink-0 mt-1">AI</div>
           <div class="bg-[#EFE5D5] p-3 rounded-2xl rounded-tl-none border border-[#DECBB4] text-[#3D2A1D] shadow-sm leading-relaxed">
-            Namaste! Wonder Kids High School AI Assistant ikkada. Ee kindha questions click cheyandi:
+            Namaste! Wonder Kids High School AI Assistant is here to assist you. Select a prompt or type below:
             <div class="mt-2 space-y-1">
-              <button onclick="sendQuickQuery('Admissions & eligibility')" class="text-left w-full px-2 py-1.5 rounded bg-[#FAF7F2] text-[#663F24] text-[11px] font-semibold border border-[#DFCDB7] hover:bg-[#E8DCB8]">📌 Admissions 2026-27</button>
-              <button onclick="sendQuickQuery('School bus routes and transportation in Khammam')" class="text-left w-full px-2 py-1.5 rounded bg-[#FAF7F2] text-[#663F24] text-[11px] font-semibold border border-[#DFCDB7] hover:bg-[#E8DCB8]">🚌 Bus Facility & Routes</button>
-              <button onclick="sendQuickQuery('Tell me about Sports: Cricket, Football, Basketball')" class="text-left w-full px-2 py-1.5 rounded bg-[#FAF7F2] text-[#663F24] text-[11px] font-semibold border border-[#DFCDB7] hover:bg-[#E8DCB8]">🏏 Sports: Cricket & Football</button>
+              <button onclick="sendQuickQuery('Admissions & eligibility for 2026-27')" class="text-left w-full px-2 py-1.5 rounded bg-[#FAF7F2] text-[#663F24] text-[11px] font-semibold border border-[#DFCDB7] hover:bg-[#E8DCB8]">📌 Admissions 2026-27</button>
+              <button onclick="sendQuickQuery('School bus routes and transportation in Khammam')" class="text-left w-full px-2 py-1.5 rounded bg-[#FAF7F2] text-[#663F24] text-[11px] font-semibold border border-[#DFCDB7] hover:bg-[#E8DCB8]">🚌 Bus Fleet & Stops</button>
+              <button onclick="sendQuickQuery('Sports training: Cricket, Football, Basketball')" class="text-left w-full px-2 py-1.5 rounded bg-[#FAF7F2] text-[#663F24] text-[11px] font-semibold border border-[#DFCDB7] hover:bg-[#E8DCB8]">🏏 Sports: Cricket & Football</button>
             </div>
           </div>
         </div>
       </div>
 
       <form onsubmit="handleChatSubmit(event)" class="p-3 bg-[#EFE5D5] border-t border-[#DFCDB7] flex gap-2">
-        <input id="chatInput" type="text" placeholder="Type question..." class="flex-1 px-3 py-2 text-xs border border-[#D5C2A8] bg-[#FAF7F2] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#8C5D38]">
+        <input id="chatInput" type="text" placeholder="Ask a question..." class="flex-1 px-3 py-2 text-xs border border-[#D5C2A8] bg-[#FAF7F2] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#8C5D38]">
         <button type="submit" class="px-3.5 py-2 bg-[#663F24] text-white rounded-xl hover:bg-[#4E2E18] transition">
           <i data-lucide="send" class="w-3.5 h-3.5"></i>
         </button>
@@ -767,6 +809,62 @@
 
   <script>
     lucide.createIcons();
+
+    // Admission Popup Handlers
+    function closeAdmissionPopup() {
+      const popup = document.getElementById('admissionPopup');
+      if (popup) popup.classList.add('hidden');
+    }
+
+    // Language Content Dictionary
+    const translations = {
+      en: {
+        nav_vision: "Vision",
+        nav_faculty: "Faculty",
+        nav_sports: "Sports",
+        nav_bus: "Bus Fleet",
+        nav_campus: "Campus",
+        nav_notices: "Notice Board",
+        nav_contact: "Contact",
+        hero_title: 'Nurturing Curious Minds into <span class="text-[#A05C26] italic">Future Leaders</span>',
+        hero_desc: "Empowering children through holistic academic excellence, smart audio-visual learning, structured sports coaching, and strong ethical values in Khammam.",
+        vision_title: "A Vision for Every Wonder Kid",
+        vision_desc: "Guided by Dr. A. P. J. Abdul Kalam's educational ideals, Wonder Kids High School nurtures curiosity into structured thinking and practical innovation. We ensure students leave our campus equipped with strong moral values, academic confidence, and creative leadership skills."
+      },
+      te: {
+        nav_vision: "లక్ష్యం",
+        nav_faculty: "ఉపాధ్యాయులు",
+        nav_sports: "క్రీడలు",
+        nav_bus: "బస్సు సౌకర్యం",
+        nav_campus: "క్యాంపస్",
+        nav_notices: "నోటీస్ బోర్డు",
+        nav_contact: "సంప్రదించండి",
+        hero_title: 'భవిష్యత్ నాయకులుగా <span class="text-[#A05C26] italic">భావి భారత పౌరులు</span>',
+        hero_desc: "ఖమ్మంలో నాణ్యమైన విద్య, డిజిటల్ స్మార్ట్ తరగతులు, క్రీడా శిక్షణ మరియు నైతిక విలువల సమగ్ర కలయికతో మీ పిల్లల భవిష్యత్తును తీర్చిదిద్దుతాము.",
+        vision_title: "డాక్టర్ కలాం గారి ప్రేరణతో",
+        vision_desc: "డాక్టర్ ఏ.పి.జె. అబ్దుల్ కలాం గారి ఆదర్శాల ప్రకారం విద్యార్థులలో జిజ్ఞాసను, ఆలోచనా శక్తిని పెంపొందిస్తూ బాధ్యతాయుతమైన పౌరులుగా తీర్చిదిద్దడమే వండర్ కిడ్స్ పాఠశాల ముఖ్య ఉద్దేశం."
+      }
+    };
+
+    function setLanguage(lang) {
+      const data = translations[lang];
+      if (!data) return;
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (data[key]) el.innerHTML = data[key];
+      });
+
+      const enBtn = document.getElementById('langEnBtn');
+      const teBtn = document.getElementById('langTeBtn');
+      if (lang === 'te') {
+        teBtn.className = "px-2 py-0.5 rounded text-[11px] font-semibold bg-[#FAF7F2] text-[#2D1B10] transition";
+        enBtn.className = "px-2 py-0.5 rounded text-[11px] font-semibold text-[#E8DCCB] hover:text-white transition";
+      } else {
+        enBtn.className = "px-2 py-0.5 rounded text-[11px] font-semibold bg-[#FAF7F2] text-[#2D1B10] transition";
+        teBtn.className = "px-2 py-0.5 rounded text-[11px] font-semibold text-[#E8DCCB] hover:text-white transition";
+      }
+    }
 
     function toggleChat() {
       const modal = document.getElementById('chatModal');
@@ -808,13 +906,13 @@
         const q = query.toLowerCase();
 
         if (q.includes('bus') || q.includes('transport') || q.includes('route') || q.includes('pickup')) {
-          response = "Maa school buses Mamillagudem, Wyra Road, Kaman Bazar tho saha Khammam city key areas lo run avthayi. Every bus lo lady attendant mariyu first-aid facility untundi.";
+          response = "Wonder Kids High School operates reliable bus routes across Mamillagudem, Wyra Road, Kaman Bazar, and all major residential parts of Khammam. Every bus is accompanied by a female attendant.";
         } else if (q.includes('admission') || q.includes('fee') || q.includes('seat')) {
-          response = "Admissions for Academic Year 2026-27 are open for Nursery to Grade 10! Form fill chesi direct campus assessment slot book chesukondi.";
+          response = "Admissions for Academic Year 2026-27 are currently open for Nursery to Grade 10. You can submit an application via the form on this page.";
         } else if (q.includes('sport') || q.includes('cricket') || q.includes('football') || q.includes('basketball')) {
-          response = "School lo dedicated cricket pitch, green football turf, basketball court, and certified PET coaches unnaru.";
+          response = "We prioritize physical health with daily dedicated sports coaching, including net cricket practice, full football ground drills, and a regulation basketball court.";
         } else if (q.includes('faculty') || q.includes('teacher')) {
-          response = "Majority staff 10+ years teaching experience unna certified subject experts.";
+          response = "Our senior teaching faculty brings 10+ years of dedicated teaching experience in state board syllabi and foundation concepts.";
         }
 
         aiBubble.innerHTML = `
@@ -826,12 +924,12 @@
         container.appendChild(aiBubble);
         container.scrollTop = container.scrollHeight;
         lucide.createIcons();
-      }, 450);
+      }, 400);
     }
 
     function handleFormSubmit(e) {
       e.preventDefault();
-      alert('Thank you! Your admission enquiry for Wonder Kids High School has been registered.');
+      alert('Thank you! Your admission inquiry for Wonder Kids High School has been registered.');
       e.target.reset();
     }
   </script>
