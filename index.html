@@ -19,9 +19,19 @@
     .font-heading { font-family: 'Playfair Display', serif; }
     .chat-scroll::-webkit-scrollbar { width: 4px; }
     .chat-scroll::-webkit-scrollbar-thumb { background: #d7c9b8; border-radius: 4px; }
+    .carousel-snap {
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+    .snap-center-card {
+      scroll-snap-align: center;
+    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
-<body class="bg-[#FAF7F2] text-[#3D2C20] font-sans antialiased selection:bg-[#8C5D38] selection:text-white">
+<body class="bg-[#FAF7F2] text-[#3D2C20] font-sans antialiased selection:bg-[#8C5D38] selection:text-white pb-12">
 
   <!-- ADMISSIONS POPUP MODAL (Opens on page load) -->
   <div id="admissionPopup" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
@@ -95,7 +105,6 @@
           W
         </div>
         <div>
-          <!-- Distinct Brand Heading Font -->
           <span class="font-brand text-lg tracking-wider text-[#2F1E13] block leading-tight">
             WONDER KIDS
           </span>
@@ -107,12 +116,13 @@
 
       <nav class="hidden lg:flex items-center space-x-7 text-sm font-medium text-[#664E3D]">
         <a href="#vision" class="hover:text-[#2F1E13] transition" data-i18n="nav_vision">Vision</a>
+        <a href="#campuses" class="hover:text-[#2F1E13] transition">Campuses</a>
+        <a href="#achievements" class="hover:text-[#2F1E13] transition">Achievements</a>
+        <a href="#gallery" class="hover:text-[#2F1E13] transition">Gallery</a>
         <a href="#faculty-activities" class="hover:text-[#2F1E13] transition" data-i18n="nav_faculty">Faculty</a>
         <a href="#sports" class="hover:text-[#2F1E13] transition" data-i18n="nav_sports">Sports</a>
         <a href="#transport" class="hover:text-[#2F1E13] transition" data-i18n="nav_bus">Bus Fleet</a>
-        <a href="#campus" class="hover:text-[#2F1E13] transition" data-i18n="nav_campus">Campus</a>
-        <a href="#notices" class="hover:text-[#2F1E13] transition" data-i18n="nav_notices">Notice Board</a>
-        <a href="#contact-us" class="hover:text-[#2F1E13] transition" data-i18n="nav_contact">Contact</a>
+        <a href="#footer-contact" class="hover:text-[#2F1E13] transition" data-i18n="nav_contact">Contact</a>
       </nav>
 
       <div class="flex items-center gap-3">
@@ -153,7 +163,6 @@
           </button>
         </div>
 
-        <!-- Metric Counters (Replaced Fit Body with Holistic Sports) -->
         <div class="grid grid-cols-3 gap-4 pt-6 border-t border-[#E3D4BF] text-center sm:text-left max-w-lg">
           <div>
             <span class="text-xl sm:text-2xl font-heading font-bold text-[#382315]">100%</span>
@@ -200,6 +209,253 @@
           <button onclick="toggleChat()" class="px-3 py-1.5 rounded-lg bg-[#FAF7F2] text-[#3D2313] font-semibold text-xs hover:bg-[#E8DCB8] transition">
             Chat
           </button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- 🌟 NEW SLIDER 1: OUR CAMPUSES (360° Horizontal Carousel) -->
+  <!-- ======================================================== -->
+  <section id="campuses" class="py-16 px-6 max-w-6xl mx-auto">
+    <div class="text-center mb-8">
+      <span class="text-xs font-semibold uppercase tracking-wider text-[#A05C26] flex items-center justify-center gap-2">
+        <span class="w-6 h-[1.5px] bg-[#A05C26]"></span> WORLD CLASS INFRASTRUCTURE <span class="w-6 h-[1.5px] bg-[#A05C26]"></span>
+      </span>
+      <h2 class="text-3xl sm:text-4xl font-heading font-bold text-[#26170E] mt-1">Our Campuses</h2>
+      <p class="text-xs sm:text-sm text-[#735E4E] mt-1">Slide horizontally to explore our specialized branches across Khammam.</p>
+    </div>
+
+    <div class="relative">
+      <div id="campusSlider" class="flex gap-6 overflow-x-auto no-scrollbar carousel-snap py-4 px-2">
+        
+        <!-- Campus 1: City Main Campus -->
+        <div class="snap-center-card shrink-0 w-[85%] sm:w-[360px] bg-[#F5EFEB] rounded-3xl overflow-hidden border border-[#DFCDB7] shadow-md hover:-translate-y-1.5 transition duration-300">
+          <div class="h-60 overflow-hidden relative bg-[#E8DCB8]">
+            <img src="images/school building photo.jfif" alt="City Campus" class="w-full h-full object-cover">
+            <span class="absolute top-4 left-4 bg-[#26170E]/85 backdrop-blur-md text-[#FAF7F2] text-[10px] font-bold px-3 py-1 rounded-full flex items-center gap-1">
+              <i data-lucide="map-pin" class="w-3 h-3 text-[#E6A052]"></i> City Campus
+            </span>
+          </div>
+          <div class="p-6">
+            <h3 class="text-lg font-heading font-bold text-[#26170E]">Main Urban Campus</h3>
+            <p class="text-xs text-[#8C5D38] mt-0.5">Centrally Situated, Khammam Urban</p>
+            <p class="text-xs text-[#614E40] mt-3 leading-relaxed">
+              Equipped with smart digital classrooms, audio-visual science theaters, advanced IT labs, and play courts.
+            </p>
+            <div class="mt-4 pt-4 border-t border-[#DFCDB7] flex items-center justify-between">
+              <span class="text-[11px] font-semibold text-[#8C5D38]">Nursery to Grade X</span>
+              <a href="#admissions" class="px-3.5 py-1.5 bg-[#663F24] hover:bg-[#4E2E18] text-white rounded-xl text-xs font-semibold transition">Tour Campus</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Campus 2: Residential Campus -->
+        <div class="snap-center-card shrink-0 w-[85%] sm:w-[360px] bg-[#F5EFEB] rounded-3xl overflow-hidden border border-[#DFCDB7] shadow-md hover:-translate-y-1.5 transition duration-300">
+          <div class="h-60 overflow-hidden relative bg-[#E8DCB8]">
+            <img src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=800&q=80" alt="Residential Campus" class="w-full h-full object-cover">
+            <span class="absolute top-4 left-4 bg-[#26170E]/85 backdrop-blur-md text-[#FAF7F2] text-[10px] font-bold px-3 py-1 rounded-full flex items-center gap-1">
+              <i data-lucide="home" class="w-3 h-3 text-[#E6A052]"></i> Green Campus
+            </span>
+          </div>
+          <div class="p-6">
+            <h3 class="text-lg font-heading font-bold text-[#26170E]">Lush Green Extension</h3>
+            <p class="text-xs text-[#8C5D38] mt-0.5">Spacious Outskirts Environment, Khammam</p>
+            <p class="text-xs text-[#614E40] mt-3 leading-relaxed">
+              Expansive, pollution-free campus with nature courtyards, open auditorium, and specialized biology garden.
+            </p>
+            <div class="mt-4 pt-4 border-t border-[#DFCDB7] flex items-center justify-between">
+              <span class="text-[11px] font-semibold text-[#8C5D38]">Primary & Middle Wing</span>
+              <a href="#admissions" class="px-3.5 py-1.5 bg-[#663F24] hover:bg-[#4E2E18] text-white rounded-xl text-xs font-semibold transition">Tour Campus</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Campus 3: Sports Arena -->
+        <div class="snap-center-card shrink-0 w-[85%] sm:w-[360px] bg-[#F5EFEB] rounded-3xl overflow-hidden border border-[#DFCDB7] shadow-md hover:-translate-y-1.5 transition duration-300">
+          <div class="h-60 overflow-hidden relative bg-[#E8DCB8]">
+            <img src="https://images.unsplash.com/photo-1541829070764-84a7d30dd3f3?auto=format&fit=crop&w=800&q=80" alt="Sports Ground" class="w-full h-full object-cover">
+            <span class="absolute top-4 left-4 bg-[#26170E]/85 backdrop-blur-md text-[#FAF7F2] text-[10px] font-bold px-3 py-1 rounded-full flex items-center gap-1">
+              <i data-lucide="trophy" class="w-3 h-3 text-[#E6A052]"></i> Athletics Hub
+            </span>
+          </div>
+          <div class="p-6">
+            <h3 class="text-lg font-heading font-bold text-[#26170E]">Integrated Sports Arena</h3>
+            <p class="text-xs text-[#8C5D38] mt-0.5">Dedicated Turf & Basketball Court</p>
+            <p class="text-xs text-[#614E40] mt-3 leading-relaxed">
+              Professional cricket nets, football training field, regulation basketball hoops, and track athletics zone.
+            </p>
+            <div class="mt-4 pt-4 border-t border-[#DFCDB7] flex items-center justify-between">
+              <span class="text-[11px] font-semibold text-[#8C5D38]">All Grades Coaching</span>
+              <a href="#sports" class="px-3.5 py-1.5 bg-[#663F24] hover:bg-[#4E2E18] text-white rounded-xl text-xs font-semibold transition">View Facilities</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Controls -->
+      <button onclick="scrollSlider('campusSlider', -360)" class="hidden sm:flex absolute -left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#FAF7F2] border border-[#DFCDB7] shadow-lg rounded-full items-center justify-center text-[#4A3423] hover:bg-[#663F24] hover:text-white transition z-10 font-bold">❮</button>
+      <button onclick="scrollSlider('campusSlider', 360)" class="hidden sm:flex absolute -right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#FAF7F2] border border-[#DFCDB7] shadow-lg rounded-full items-center justify-center text-[#4A3423] hover:bg-[#663F24] hover:text-white transition z-10 font-bold">❯</button>
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- 🏆 NEW SLIDER 2: OUR ACHIEVEMENTS (Hall of Fame Slider)  -->
+  <!-- ======================================================== -->
+  <section id="achievements" class="py-16 bg-[#F5EFEB] px-6 border-y border-[#DFCDB7]">
+    <div class="max-w-6xl mx-auto">
+      
+      <div class="text-center mb-8">
+        <span class="text-xs font-semibold uppercase tracking-wider text-[#A05C26] flex items-center justify-center gap-1.5">
+          ⭐ STUDENT HONORS & MERIT AWARDS
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-heading font-bold text-[#26170E] mt-1">Our Achievements</h2>
+        <p class="text-xs sm:text-sm text-[#735E4E] mt-1">Celebrating excellence at state, district, and national competitions.</p>
+      </div>
+
+      <div class="relative">
+        <div id="achievementSlider" class="flex gap-6 overflow-x-auto no-scrollbar carousel-snap py-4 px-2">
+
+          <!-- Card 1: VVM National Camp (Screenshot Match) -->
+          <div class="snap-center-card shrink-0 w-[90%] sm:w-[420px] bg-[#FAF7F2] rounded-3xl p-5 border border-[#DFCDB7] shadow-md">
+            <div class="rounded-2xl p-4 bg-white border border-[#EBE0D3] text-center">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-[#A05C26] bg-amber-500/15 px-3 py-1 rounded-full">
+                STATE & NATIONAL CAMP
+              </span>
+              <h4 class="text-xl font-heading font-bold text-[#26170E] mt-2 italic">Congratulations!</h4>
+
+              <div class="my-3.5 rounded-xl overflow-hidden border border-[#DFCDB7] h-44 bg-[#E8DCB8]">
+                <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover" alt="Student Award">
+              </div>
+
+              <h5 class="text-sm font-bold text-[#26170E]">VVM National Camp 2026 Selection</h5>
+              <p class="text-xs text-[#614E40] mt-2 text-left leading-relaxed">
+                <strong>Bhuvan Tripathi</strong> (Class VII) represented our school at the Vidyarthi Vigyan Manthan State Camp held at Anurag University, clinching <strong>2nd Prize</strong> (Trophy, Certificate & ₹3,000 Cash Prize).
+              </p>
+              <p class="text-[11px] text-[#A05C26] font-semibold mt-2 text-left">
+                Selected for Final Round at IIT Gandhinagar!
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 2: SOF Olympiad Medals -->
+          <div class="snap-center-card shrink-0 w-[90%] sm:w-[420px] bg-[#FAF7F2] rounded-3xl p-5 border border-[#DFCDB7] shadow-md">
+            <div class="rounded-2xl p-4 bg-white border border-[#EBE0D3] text-center">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-[#A05C26] bg-amber-500/15 px-3 py-1 rounded-full">
+                INTERNATIONAL SOF OLYMPIAD
+              </span>
+              <h4 class="text-xl font-heading font-bold text-[#26170E] mt-2 italic">Gold Medalists</h4>
+
+              <div class="my-3.5 rounded-xl overflow-hidden border border-[#DFCDB7] h-44 bg-[#E8DCB8]">
+                <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover" alt="Olympiad Winners">
+              </div>
+
+              <h5 class="text-sm font-bold text-[#26170E]">Science & Math Olympiad Honors</h5>
+              <p class="text-xs text-[#614E40] mt-2 text-left leading-relaxed">
+                12 students earned International Gold Medals of Excellence with 99+ percentile ranks in SOF National Science & Cyber Olympiad competitions.
+              </p>
+              <p class="text-[11px] text-[#A05C26] font-semibold mt-2 text-left">
+                100% Distinction honors awarded by Council.
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 3: District Sports Cup -->
+          <div class="snap-center-card shrink-0 w-[90%] sm:w-[420px] bg-[#FAF7F2] rounded-3xl p-5 border border-[#DFCDB7] shadow-md">
+            <div class="rounded-2xl p-4 bg-white border border-[#EBE0D3] text-center">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-[#A05C26] bg-amber-500/15 px-3 py-1 rounded-full">
+                DISTRICT SPORTS MEET
+              </span>
+              <h4 class="text-xl font-heading font-bold text-[#26170E] mt-2 italic">Inter-School Champions</h4>
+
+              <div class="my-3.5 rounded-xl overflow-hidden border border-[#DFCDB7] h-44 bg-[#E8DCB8]">
+                <img src="https://images.unsplash.com/photo-1526676037777-05a232554f77?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover" alt="Cricket Trophy">
+              </div>
+
+              <h5 class="text-sm font-bold text-[#26170E]">Under-14 Cricket & Athletics Trophy</h5>
+              <p class="text-xs text-[#614E40] mt-2 text-left leading-relaxed">
+                School junior cricket squad emerged undefeated champions in the Khammam Inter-School Invitational, bringing home the rolling championship shield.
+              </p>
+              <p class="text-[11px] text-[#A05C26] font-semibold mt-2 text-left">
+                Player of the tournament awarded to Class IX captain.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        <button onclick="scrollSlider('achievementSlider', -380)" class="hidden sm:flex absolute -left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#FAF7F2] border border-[#DFCDB7] shadow-lg rounded-full items-center justify-center text-[#4A3423] hover:bg-[#663F24] hover:text-white transition z-10 font-bold">❮</button>
+        <button onclick="scrollSlider('achievementSlider', 380)" class="hidden sm:flex absolute -right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#FAF7F2] border border-[#DFCDB7] shadow-lg rounded-full items-center justify-center text-[#4A3423] hover:bg-[#663F24] hover:text-white transition z-10 font-bold">❯</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- 📷 NEW SLIDER 3: PHOTO GALLERY ("Special Moments")       -->
+  <!-- ======================================================== -->
+  <section id="gallery" class="py-16 px-6 bg-[#26170E] text-white">
+    <div class="max-w-6xl mx-auto">
+      
+      <div class="text-center mb-8">
+        <span class="text-xs font-semibold uppercase tracking-widest text-[#E6A052]">Special Moments</span>
+        <h2 class="text-3xl sm:text-4xl font-heading font-bold mt-1 text-white">Photo Gallery</h2>
+        <p class="text-xs sm:text-sm text-[#D7C3B0] max-w-lg mx-auto mt-2 leading-relaxed">
+          "We love the idea of bringing our work to the general public, not just people who go to gallery openings."
+        </p>
+      </div>
+
+      <div class="relative">
+        <div id="gallerySlider" class="flex gap-5 overflow-x-auto no-scrollbar carousel-snap py-4 px-2">
+          
+          <!-- Photo 1: Class Assembly -->
+          <div class="snap-center-card shrink-0 w-[80%] sm:w-[320px] bg-[#FAF7F2] text-[#26170E] rounded-3xl overflow-hidden shadow-xl p-3 border border-[#E8DFC9]">
+            <div class="h-64 rounded-2xl overflow-hidden bg-slate-100">
+              <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=600&q=80" alt="Class Assembly" class="w-full h-full object-cover">
+            </div>
+            <div class="p-3 text-center">
+              <span class="text-[11px] font-black uppercase text-[#663F24] tracking-wider">GRADE 4B & 4I - CLASS ASSEMBLY</span>
+            </div>
+          </div>
+
+          <!-- Photo 2: Science Fair -->
+          <div class="snap-center-card shrink-0 w-[80%] sm:w-[320px] bg-[#FAF7F2] text-[#26170E] rounded-3xl overflow-hidden shadow-xl p-3 border border-[#E8DFC9]">
+            <div class="h-64 rounded-2xl overflow-hidden bg-slate-100">
+              <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=600&q=80" alt="Science Fair" class="w-full h-full object-cover">
+            </div>
+            <div class="p-3 text-center">
+              <span class="text-[11px] font-black uppercase text-[#663F24] tracking-wider">ANNUAL SCIENCE & STEM EXHIBITION</span>
+            </div>
+          </div>
+
+          <!-- Photo 3: Play-Way Activities -->
+          <div class="snap-center-card shrink-0 w-[80%] sm:w-[320px] bg-[#FAF7F2] text-[#26170E] rounded-3xl overflow-hidden shadow-xl p-3 border border-[#E8DFC9]">
+            <div class="h-64 rounded-2xl overflow-hidden bg-slate-100">
+              <img src="images/activities.jfif" alt="Joyful Learning" class="w-full h-full object-cover">
+            </div>
+            <div class="p-3 text-center">
+              <span class="text-[11px] font-black uppercase text-[#663F24] tracking-wider">PRE-PRIMARY CREATIVE CRAFT FEST</span>
+            </div>
+          </div>
+
+          <!-- Photo 4: Sports Meet -->
+          <div class="snap-center-card shrink-0 w-[80%] sm:w-[320px] bg-[#FAF7F2] text-[#26170E] rounded-3xl overflow-hidden shadow-xl p-3 border border-[#E8DFC9]">
+            <div class="h-64 rounded-2xl overflow-hidden bg-slate-100">
+              <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=600&q=80" alt="Sports Meet" class="w-full h-full object-cover">
+            </div>
+            <div class="p-3 text-center">
+              <span class="text-[11px] font-black uppercase text-[#663F24] tracking-wider">ANNUAL ATHLETIC SPORTS DAY</span>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="text-center mt-6">
+          <a href="#admissions" class="inline-block px-8 py-2.5 bg-[#D9822B] hover:bg-[#C26715] text-white font-semibold rounded-full text-xs shadow-lg transition">
+            View All Memories
+          </a>
         </div>
       </div>
 
@@ -341,7 +597,7 @@
     </div>
   </section>
 
-  <!-- 3. SPORTS & FITNESS (CRICKET, FOOTBALL, BASKETBALL) -->
+  <!-- 3. SPORTS & FITNESS -->
   <section id="sports" class="py-16 px-6 max-w-6xl mx-auto">
     <div class="max-w-3xl mb-10">
       <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#A05C26] mb-2">
@@ -356,15 +612,10 @@
     </div>
 
     <div class="grid md:grid-cols-3 gap-6">
-      <!-- Cricket -->
       <div class="bg-[#F5EFEB] rounded-3xl overflow-hidden border border-[#DFCDB7] shadow-sm flex flex-col justify-between">
         <div>
           <div class="h-52 overflow-hidden relative bg-[#E8DCB8]">
-            <img 
-              src="images/cricket.jfif" 
-              alt="School Cricket Coaching" 
-              class="w-full h-full object-cover object-center"
-            />
+            <img src="images/cricket.jfif" alt="School Cricket Coaching" class="w-full h-full object-cover object-center"/>
             <span class="absolute top-3 left-3 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#26170E]/80 text-[#FAF7F2]">
               Pitch & Nets
             </span>
@@ -382,15 +633,10 @@
         </div>
       </div>
 
-      <!-- Football -->
       <div class="bg-[#F5EFEB] rounded-3xl overflow-hidden border border-[#DFCDB7] shadow-sm flex flex-col justify-between">
         <div>
           <div class="h-52 overflow-hidden relative bg-[#E8DCB8]">
-            <img 
-              src="images/football.jfif" 
-              alt="Kids Football Practice" 
-              class="w-full h-full object-cover object-center"
-            />
+            <img src="images/football.jfif" alt="Kids Football Practice" class="w-full h-full object-cover object-center"/>
             <span class="absolute top-3 left-3 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#26170E]/80 text-[#FAF7F2]">
               Field Turf
             </span>
@@ -403,20 +649,15 @@
           </div>
         </div>
         <div class="px-6 pb-5 pt-2 border-t border-[#DECBB6]/60 flex items-center justify-between text-xs text-[#8C5D38] font-semibold">
-          <span>Cardio & Team Coordination</span>
+          <span>Cardio & Coordination</span>
           <i data-lucide="activity" class="w-4 h-4 text-[#A05C26]"></i>
         </div>
       </div>
 
-      <!-- Basketball -->
       <div class="bg-[#F5EFEB] rounded-3xl overflow-hidden border border-[#DFCDB7] shadow-sm flex flex-col justify-between">
         <div>
           <div class="h-52 overflow-hidden relative bg-[#E8DCB8]">
-            <img 
-              src="images/basketball.jfif" 
-              alt="Outdoor Basketball Court" 
-              class="w-full h-full object-cover object-center"
-            />
+            <img src="images/basketball.jfif" alt="Outdoor Basketball Court" class="w-full h-full object-cover object-center"/>
             <span class="absolute top-3 left-3 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#26170E]/80 text-[#FAF7F2]">
               Ring Court
             </span>
@@ -424,12 +665,12 @@
           <div class="p-6">
             <h3 class="text-lg font-heading font-bold text-[#26170E] mb-1.5">Basketball Court</h3>
             <p class="text-xs text-[#614E40] leading-relaxed">
-              Certified full outdoor court with regulation rings. Helps develop jumping power, height progression, and split-second focus.
+              Certified outdoor court with regulation rings. Helps develop jumping power, height progression, and split-second focus.
             </p>
           </div>
         </div>
         <div class="px-6 pb-5 pt-2 border-t border-[#DECBB6]/60 flex items-center justify-between text-xs text-[#8C5D38] font-semibold">
-          <span>Speed & Hand-Eye Coordination</span>
+          <span>Speed & Hand-Eye Reflexes</span>
           <i data-lucide="zap" class="w-4 h-4 text-[#A05C26]"></i>
         </div>
       </div>
@@ -442,11 +683,7 @@
       <div class="grid md:grid-cols-12 gap-8 items-center">
         <div class="md:col-span-5 flex justify-center">
           <div class="w-full max-w-sm rounded-2xl overflow-hidden border-2 border-[#D5C2A8] shadow-lg bg-[#E8DCB8]">
-            <img 
-              src="images/yellow bus photo.jfif" 
-              alt="Wonder Kids School Bus Safety" 
-              class="w-full h-80 sm:h-96 object-cover object-center"
-            />
+            <img src="images/yellow bus photo.jfif" alt="School Bus Safety" class="w-full h-80 sm:h-96 object-cover object-center"/>
           </div>
         </div>
 
@@ -496,143 +733,6 @@
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 5. FOUR COMMITMENTS -->
-  <section id="commitments" class="py-16 px-6 bg-[#162130] text-slate-100">
-    <div class="max-w-6xl mx-auto">
-      <div class="max-w-2xl mb-10">
-        <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-amber-400 mb-2">
-          <span class="w-6 h-[1.5px] bg-amber-400"></span> WHY CHOOSE US
-        </div>
-        <h2 class="text-3xl md:text-4xl font-heading font-bold text-white">Four Commitments, One Campus</h2>
-        <p class="text-slate-400 text-sm mt-2">
-          Everything at Wonder Kids is built around four fundamental promises we make to every family in Khammam.
-        </p>
-      </div>
-
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="p-6 rounded-2xl bg-[#1E2B3D] border border-slate-700/60">
-          <span class="font-heading text-3xl text-amber-400/80 block mb-3">01</span>
-          <h3 class="text-base font-heading font-bold text-white mb-2">Academic Depth</h3>
-          <p class="text-xs text-slate-300 leading-relaxed">Concept-first teaching and structured remediation keep every learner moving forward.</p>
-        </div>
-        <div class="p-6 rounded-2xl bg-[#1E2B3D] border border-slate-700/60">
-          <span class="font-heading text-3xl text-amber-400/80 block mb-3">02</span>
-          <h3 class="text-base font-heading font-bold text-white mb-2">Character & Care</h3>
-          <p class="text-xs text-slate-300 leading-relaxed">Dedicated student mentoring, moral values, and emotional well-being attention.</p>
-        </div>
-        <div class="p-6 rounded-2xl bg-[#1E2B3D] border border-slate-700/60">
-          <span class="font-heading text-3xl text-amber-400/80 block mb-3">03</span>
-          <h3 class="text-base font-heading font-bold text-white mb-2">Sport & Stage</h3>
-          <p class="text-xs text-slate-300 leading-relaxed">Cricket, football, basketball courts, and speech & debate talent platforms.</p>
-        </div>
-        <div class="p-6 rounded-2xl bg-[#1E2B3D] border border-slate-700/60">
-          <span class="font-heading text-3xl text-amber-400/80 block mb-3">04</span>
-          <h3 class="text-base font-heading font-bold text-white mb-2">Future Ready</h3>
-          <p class="text-xs text-slate-300 leading-relaxed">Practical computer lab learning, modern analytical thinking from early grades.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 6. CAMPUS SHOWCASE -->
-  <section id="campus" class="py-16 px-6 max-w-6xl mx-auto">
-    <div class="max-w-2xl mb-10">
-      <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#A05C26] mb-2">
-        <span class="w-6 h-[1.5px] bg-[#A05C26]"></span> CAMPUS & INFRASTRUCTURE
-      </div>
-      <h2 class="text-3xl md:text-4xl font-heading font-bold text-[#26170E]">A Campus Built for Curiosity</h2>
-      <p class="text-slate-600 text-sm mt-1">
-        Dedicated learning spaces in the heart of Khammam — engineered for safety, light, and play.
-      </p>
-    </div>
-
-    <div class="bg-[#F5EFEB] rounded-3xl overflow-hidden border border-[#DFCDB7] shadow-sm">
-      <div class="w-full h-80 sm:h-[400px] overflow-hidden bg-[#E8DCB8]">
-        <img 
-          src="images/school building photo.jfif" 
-          alt="Wonder Kids Campus Building" 
-          class="w-full h-full object-cover object-center"
-        />
-      </div>
-      <div class="p-8 grid md:grid-cols-3 gap-6">
-        <div>
-          <h3 class="text-lg font-heading font-bold text-[#26170E] mb-1">Spacious Grounds</h3>
-          <p class="text-xs text-[#614E40] leading-relaxed">Lush courtyard, well-ventilated corridors, and dedicated open-air play areas for kids.</p>
-        </div>
-        <div>
-          <h3 class="text-lg font-heading font-bold text-[#26170E] mb-1">Modern Audio-Visual</h3>
-          <p class="text-xs text-[#614E40] leading-relaxed">Interactive smart displays in every classroom to make complex science and math simple.</p>
-        </div>
-        <div>
-          <h3 class="text-lg font-heading font-bold text-[#26170E] mb-1">Safe Environment</h3>
-          <p class="text-xs text-[#614E40] leading-relaxed">24/7 CCTV surveillance, purified RO drinking water, and high hygiene standards.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 7. NOTICE BOARD -->
-  <section id="notices" class="py-16 px-6 bg-[#F0E6D8]">
-    <div class="max-w-6xl mx-auto">
-      <div class="max-w-2xl mb-10">
-        <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#A05C26] mb-2">
-          <span class="w-6 h-[1.5px] bg-[#A05C26]"></span> LATEST UPDATES
-        </div>
-        <h2 class="text-3xl font-heading font-bold text-[#26170E]">From the Notice Board</h2>
-      </div>
-
-      <div class="grid md:grid-cols-3 gap-6">
-        <div class="bg-[#FAF7F2] p-7 rounded-2xl border border-[#DECDB7] shadow-sm flex flex-col justify-between">
-          <div>
-            <span class="inline-block px-3 py-1 rounded-md text-[11px] font-semibold bg-[#E8DCB8] text-[#6A4321] uppercase tracking-wider mb-3">
-              ADMISSIONS
-            </span>
-            <h3 class="text-base font-heading font-bold text-[#26170E] mb-2">Admissions Open 2026–27</h3>
-            <p class="text-xs text-[#8C5D38] font-medium mb-3">Academic Cell</p>
-            <p class="text-xs text-[#614E40] leading-relaxed">
-              Applications are now invited for Pre-Primary to Grade 10. Limited seats per section.
-            </p>
-          </div>
-          <a href="#admissions" class="mt-6 inline-flex items-center gap-1 text-xs font-semibold text-[#A05C26] hover:underline">
-            Register Online <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-          </a>
-        </div>
-
-        <div class="bg-[#FAF7F2] p-7 rounded-2xl border border-[#DECDB7] shadow-sm flex flex-col justify-between">
-          <div>
-            <span class="inline-block px-3 py-1 rounded-md text-[11px] font-semibold bg-[#E8DCB8] text-[#6A4321] uppercase tracking-wider mb-3">
-              SPORTS & BUS
-            </span>
-            <h3 class="text-base font-heading font-bold text-[#26170E] mb-2">Bus Routes & Training Timetable</h3>
-            <p class="text-xs text-[#8C5D38] font-medium mb-3">Sports Cell</p>
-            <p class="text-xs text-[#614E40] leading-relaxed">
-              New pickup stops added across Khammam. Evening cricket & football coaching batches commence.
-            </p>
-          </div>
-          <button onclick="toggleChat()" class="mt-6 inline-flex items-center gap-1 text-xs font-semibold text-[#A05C26] hover:underline">
-            Ask AI for Stops <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-          </button>
-        </div>
-
-        <div class="bg-[#FAF7F2] p-7 rounded-2xl border border-[#DECDB7] shadow-sm flex flex-col justify-between">
-          <div>
-            <span class="inline-block px-3 py-1 rounded-md text-[11px] font-semibold bg-[#E8DCB8] text-[#6A4321] uppercase tracking-wider mb-3">
-              ACADEMICS
-            </span>
-            <h3 class="text-base font-heading font-bold text-[#26170E] mb-2">SSC Board Guidance</h3>
-            <p class="text-xs text-[#8C5D38] font-medium mb-3">Term II Mentorship</p>
-            <p class="text-xs text-[#614E40] leading-relaxed">
-              Special doubt sessions guided by our 10+ years experienced faculty for high school students.
-            </p>
-          </div>
-          <a href="#contact-us" class="mt-6 inline-flex items-center gap-1 text-xs font-semibold text-[#A05C26] hover:underline">
-            Connect Desk <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-          </a>
         </div>
       </div>
     </div>
@@ -688,79 +788,117 @@
     </div>
   </section>
 
-  <!-- 9. CONTACT US & GOOGLE MAPS -->
-  <section id="contact-us" class="py-16 px-6 max-w-6xl mx-auto">
-    <div class="text-center max-w-2xl mx-auto mb-10">
-      <span class="text-xs font-semibold uppercase tracking-wider text-[#A05C26]">Locate Us</span>
-      <h2 class="text-3xl font-heading font-bold text-[#26170E] mt-1">Campus & Location</h2>
-      <p class="text-sm text-[#735E4E] mt-1">Centrally situated in Khammam Urban, Telangana.</p>
-    </div>
-
-    <div class="grid md:grid-cols-2 gap-8 items-start">
-      <div class="bg-[#F5EFEB] border border-[#DFCDB7] rounded-3xl p-8 space-y-6">
-        <div>
-          <h3 class="text-xl font-heading font-bold text-[#2A180E] mb-4">Wonder Kids High School</h3>
-          <div class="space-y-3 text-sm text-[#5B4739]">
-            <div class="flex items-start gap-3">
-              <i data-lucide="map-pin" class="w-5 h-5 text-[#9C5A25] shrink-0 mt-0.5"></i>
-              <div>
-                <p class="font-semibold text-[#2C190F]">Main Campus:</p>
-                <p>Khammam Urban, Telangana — <strong>507001</strong></p>
-              </div>
-            </div>
-
-            <div class="flex items-start gap-3">
-              <i data-lucide="phone" class="w-5 h-5 text-[#9C5A25] shrink-0 mt-0.5"></i>
-              <div>
-                <p class="font-semibold text-[#2C190F]">Phone:</p>
-                <p>+91 79816 15788 / +91 83097 72422</p>
-              </div>
-            </div>
-
-            <div class="flex items-start gap-3">
-              <i data-lucide="mail" class="w-5 h-5 text-[#9C5A25] shrink-0 mt-0.5"></i>
-              <div>
-                <p class="font-semibold text-[#2C190F]">Email:</p>
-                <p>info@wonderkidskhammam.edu.in</p>
-              </div>
-            </div>
+  <!-- ======================================================== -->
+  <!-- 📌 NEW SECTION: DPS SCREENSHOT STYLE EXPANDABLE FOOTER   -->
+  <!-- ======================================================== -->
+  <footer id="footer-contact" class="bg-[#1C1008] text-[#D8C7B5] pt-14 pb-20 border-t border-[#3D2313] mt-12">
+    <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
+      
+      <!-- Column 1: About Us -->
+      <div class="space-y-3 md:col-span-1">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-[#FAF7F2] text-[#2D1B10] flex items-center justify-center font-brand font-bold text-xl shadow">
+            W
+          </div>
+          <div>
+            <h4 class="text-sm font-brand font-bold tracking-wider text-white">WONDER KIDS</h4>
+            <p class="text-[10px] text-[#E6A052]">High School • Khammam</p>
           </div>
         </div>
-
-        <div class="pt-4 border-t border-[#DECBB6]">
-          <a href="https://wa.me/917981615788?text=Hello%20Wonder%20Kids%20School%20Khammam" target="_blank" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-700 text-white font-semibold text-xs hover:bg-emerald-800 transition">
-            <i data-lucide="message-square" class="w-4 h-4"></i> Chat on WhatsApp
-          </a>
+        <p class="text-xs text-[#A89481] leading-relaxed pt-2">
+          Empowering children through balanced curriculum, play-way discovery, Dr. Kalam's inspiration, and structured sports development in Telangana.
+        </p>
+        <div class="pt-2">
+          <span class="text-[11px] bg-[#2E1B10] border border-[#52331E] text-[#E6A052] px-3 py-1 rounded-md font-semibold">
+            Visitors: 811785
+          </span>
         </div>
       </div>
 
-      <div class="rounded-3xl overflow-hidden border border-[#DDCBB4] shadow-lg h-[360px] bg-[#E8DCB8]">
-        <iframe 
-          title="Wonder Kids High School Khammam Map"
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d60943.43577317769!2d80.11718105786445!3d17.24725350993952!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a35ab2bf3381a8b%3A0x6d9f7831f4a95ea!2sKhammam%2C%20Telangana%20507001!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin" 
-          width="100%" 
-          height="100%" 
-          style="border:0;" 
-          allowfullscreen="" 
-          loading="lazy" 
-          referrerpolicy="no-referrer-when-downgrade">
-        </iframe>
+      <!-- Column 2: Academics (Screenshot Accordion Match) -->
+      <div class="space-y-2">
+        <button onclick="toggleFooterSection('academicsList', 'acadIcon')" class="w-full text-xs font-bold uppercase tracking-wider text-[#E6A052] border-b border-[#3D2313] pb-2 flex justify-between items-center text-left">
+          <span>ACADEMICS</span>
+          <span id="acadIcon" class="text-sm text-[#E6A052] font-mono">+</span>
+        </button>
+        <ul id="academicsList" class="text-xs space-y-2 text-[#C4B29E] font-medium pt-1">
+          <li><a href="#" class="hover:text-white transition">Pre-Primary School (Nursery / PP1 / PP2)</a></li>
+          <li><a href="#" class="hover:text-white transition">Primary School (Class 1 to 5)</a></li>
+          <li><a href="#" class="hover:text-white transition">Middle School (Class 6 to 8)</a></li>
+          <li><a href="#" class="hover:text-white transition">High School (Class 9 & 10)</a></li>
+          <li><a href="#" class="hover:text-white transition">Competitive Programs & Olympiads</a></li>
+          <li><a href="#" class="hover:text-white transition">Smart Audio-Visual Classrooms</a></li>
+          <li><a href="#" class="hover:text-white transition">Assessment & Promotion Rules</a></li>
+        </ul>
       </div>
-    </div>
-  </section>
 
-  <!-- Footer with snātak.dev attribution -->
-  <footer class="bg-[#29170C] text-[#D8C7B5] py-14 px-6 border-t border-[#3D2313]">
-    <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
-      <div>
-        <h4 class="text-white font-brand text-base tracking-wider">WONDER KIDS HIGH SCHOOL</h4>
-        <p class="text-xs text-[#A89481] mt-1">Khammam, Telangana — 507001</p>
+      <!-- Column 3: Admissions (Screenshot Accordion Match) -->
+      <div class="space-y-2">
+        <button onclick="toggleFooterSection('admissionsList', 'admIcon')" class="w-full text-xs font-bold uppercase tracking-wider text-[#E6A052] border-b border-[#3D2313] pb-2 flex justify-between items-center text-left">
+          <span>ADMISSIONS</span>
+          <span id="admIcon" class="text-sm text-[#E6A052] font-mono">+</span>
+        </button>
+        <ul id="admissionsList" class="text-xs space-y-2 text-[#C4B29E] font-medium pt-1">
+          <li><a href="#admissions" class="hover:text-white transition">Admission Process 2026-27</a></li>
+          <li><a href="#admissions" class="hover:text-white transition">Age Criteria & Eligibility</a></li>
+          <li><a href="#transport" class="hover:text-white transition">Bus Transport Routes</a></li>
+          <li><a href="#admissions" class="hover:text-white transition">Fee Payment Options</a></li>
+          <li><a href="#admissions" class="hover:text-white transition">Submit Online Application</a></li>
+          <li><a href="#admissions" class="hover:text-white transition">Documents Required at Enrolment</a></li>
+        </ul>
       </div>
-      <p class="text-xs text-[#8A7665]">
-        Designed & Built by <strong class="text-[#E8A359]">snātak.dev</strong>
-      </p>
+
+      <!-- Column 4: Contact Info (Screenshot Exact Match) -->
+      <div class="space-y-2">
+        <button onclick="toggleFooterSection('contactList', 'conIcon')" class="w-full text-xs font-bold uppercase tracking-wider text-[#E6A052] border-b border-[#3D2313] pb-2 flex justify-between items-center text-left">
+          <span>CONTACT INFO</span>
+          <span id="conIcon" class="text-sm text-[#E6A052] font-mono">+</span>
+        </button>
+        
+        <div id="contactList" class="text-xs space-y-2.5 text-[#C4B29E] pt-1">
+          <p>
+            <strong class="text-white block">Mobile No:</strong>
+            <a href="tel:+919642399994" class="hover:text-[#E6A052]">+91 96423 99994</a>, 
+            <a href="tel:+919640192192" class="hover:text-[#E6A052]">+91 96401 92192</a>
+          </p>
+          <p>
+            <strong class="text-white block">Whats App:</strong>
+            <a href="https://wa.me/919642399994" target="_blank" class="hover:text-[#E6A052]">+91 96423 99994</a>, 
+            <a href="https://wa.me/919640192192" target="_blank" class="hover:text-[#E6A052]">+91 96401 92192</a>
+          </p>
+          <p>
+            <strong class="text-white block">Email ID:</strong>
+            <a href="mailto:dpskhammam99@gmail.com" class="hover:text-[#E6A052]">dpskhammam99@gmail.com</a>
+          </p>
+          <p class="pt-1">
+            <strong class="text-white block">City Campus:</strong>
+            Mamtha Hospital Road, Kaviraj Nagar, Khammam, TG-507 001.
+          </p>
+          <p>
+            <strong class="text-white block">Residential Campus:</strong>
+            Velugumatla Village, Gollagudem Road, Khammam Division -14, Khammam Urban, TG-507 318.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Attribution & Copyright -->
+    <div class="max-w-6xl mx-auto px-6 mt-12 pt-6 border-t border-[#331D0F] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#8A7665]">
+      <p>© 2026 Wonder Kids High School, Khammam. All Rights Reserved.</p>
+      <p>Designed & Built by <strong class="text-[#E8A359]">snātak.dev</strong></p>
     </div>
   </footer>
+
+  <!-- Floating Sticky Action Buttons (WhatsApp + Scroll To Top) -->
+  <div class="fixed bottom-6 left-6 z-40 flex items-center gap-3">
+    <a href="https://wa.me/919642399994?text=Hello%20Wonder%20Kids%20School%20Khammam" target="_blank" class="w-12 h-12 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center shadow-2xl transition hover:scale-110">
+      <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+    </a>
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="w-12 h-12 rounded-full bg-[#FAF7F2] text-[#3D2C20] border-2 border-[#D5C2A8] flex items-center justify-center shadow-2xl hover:scale-110 transition font-bold text-sm">
+      ▲
+    </button>
+  </div>
 
   <!-- Floating AI Assistant Widget -->
   <div class="fixed bottom-6 right-6 z-50">
@@ -814,6 +952,30 @@
     function closeAdmissionPopup() {
       const popup = document.getElementById('admissionPopup');
       if (popup) popup.classList.add('hidden');
+    }
+
+    // Slider Controller
+    function scrollSlider(sliderId, distance) {
+      const el = document.getElementById(sliderId);
+      if (el) {
+        el.scrollBy({ left: distance, behavior: 'smooth' });
+      }
+    }
+
+    // Footer Accordion Toggle
+    function toggleFooterSection(listId, iconId) {
+      const list = document.getElementById(listId);
+      const icon = document.getElementById(iconId);
+      if (list && icon) {
+        const isHidden = list.classList.contains('hidden');
+        if (isHidden) {
+          list.classList.remove('hidden');
+          icon.innerText = '−';
+        } else {
+          list.classList.add('hidden');
+          icon.innerText = '+';
+        }
+      }
     }
 
     // Language Content Dictionary
