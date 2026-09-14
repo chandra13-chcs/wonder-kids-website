@@ -308,6 +308,9 @@
       firebase.initializeApp(firebaseConfig);
     }
     const db = firebase.firestore();
+    db.settings({
+  experimentalForceLongPolling: true
+});
 
     let uploadedBase64Image = null;
 
