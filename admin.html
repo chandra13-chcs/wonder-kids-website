@@ -6,7 +6,7 @@
   <title>Wonder Kids Portal | School Management Console</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <!-- Firebase App & Firestore SDKs -->
@@ -14,7 +14,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
   <style>
     body { font-family: 'Plus Jakarta Sans', sans-serif; }
-    .font-brand { font-family: 'Cinzel Decorative', serif; }
+    .font-brand { font-family: 'Michroma', sans-serif; }
     .font-heading { font-family: 'Playfair Display', serif; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -25,7 +25,7 @@
   <!-- 1. LOGIN OVERLAY -->
   <div id="loginOverlay" class="fixed inset-0 z-50 bg-[#2D1B10] flex items-center justify-center p-4">
     <div class="bg-[#FAF7F2] rounded-3xl border border-[#DFCDB7] shadow-2xl max-w-sm w-full p-8 text-center">
-      <div class="w-14 h-14 mx-auto rounded-2xl bg-gradient-to-br from-[#663F24] to-[#3A2415] flex items-center justify-center font-brand font-bold text-[#FAF7F2] text-2xl border border-[#8C5D38]/40 shadow-lg mb-4">
+      <div class="w-14 h-14 mx-auto rounded-2xl bg-gradient-to-br from-[#663F24] to-[#3A2415] flex items-center justify-center font-brand font-bold text-[#FAF7F2] text-xl border border-[#8C5D38]/40 shadow-lg mb-4">
         W
       </div>
       <h2 class="text-xl font-heading font-bold text-[#26170E]">Wonder Kids Console</h2>
@@ -60,12 +60,12 @@
     </div>
   </div>
 
-  <!-- 2. MANAGEMENT DASHBOARD -->
+  <!-- 2. MANAGEMENT APP -->
   <div id="dashboardApp" class="hidden pb-16">
     <header class="bg-[#2D1B10] text-white px-6 py-4 border-b border-[#442B1A] sticky top-0 z-30 shadow-md">
       <div class="max-w-7xl mx-auto flex items-center justify-between flex-wrap gap-4">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#663F24] to-[#3A2415] flex items-center justify-center font-brand font-bold text-[#FAF7F2] text-xl border border-[#8C5D38]/40 shadow-sm">
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#663F24] to-[#3A2415] flex items-center justify-center font-brand font-bold text-[#FAF7F2] text-lg border border-[#8C5D38]/40 shadow-sm">
             W
           </div>
           <div>
@@ -77,7 +77,7 @@
           </div>
         </div>
 
-        <!-- Full Navigation Bar Tabs -->
+        <!-- Navigation Bar Tabs (Full 5 Tabs) -->
         <div class="flex items-center gap-1.5 bg-[#442B1A] p-1 rounded-2xl border border-[#5C3820] overflow-x-auto no-scrollbar">
           <button id="tabGallery" onclick="switchTab('gallery')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#663F24] text-white flex items-center gap-1.5 transition shadow-sm">
             <i data-lucide="image" class="w-4 h-4"></i> Gallery
@@ -109,7 +109,7 @@
 
     <main class="max-w-6xl mx-auto px-6 py-8">
 
-      <!-- TAB 1: GALLERY (MATCHING OLD SCREENSHOT) -->
+      <!-- TAB 1: GALLERY -->
       <section id="secGallery" class="space-y-6">
         <div class="bg-[#F5EFEB] rounded-3xl border border-[#DFCDB7] p-6 sm:p-8 shadow-sm">
           <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#A05C26] mb-1">
@@ -157,7 +157,6 @@
           </form>
         </div>
 
-        <!-- Live Published Photos Grid -->
         <div class="bg-[#F5EFEB] rounded-3xl border border-[#DFCDB7] p-6 sm:p-8 shadow-sm">
           <div class="flex items-center justify-between pb-4 border-b border-[#DFCDB7] mb-6">
             <div>
@@ -240,7 +239,7 @@
         </div>
       </section>
 
-      <!-- TAB 4: ADMISSIONS (LIVE CLOUD FIRESTORE) -->
+      <!-- TAB 4: ADMISSIONS (WITH WHATSAPP + DIRECT MAIL ACCEPT) -->
       <section id="secLeads" class="hidden space-y-6">
         <div class="bg-[#F5EFEB] rounded-3xl border border-[#DFCDB7] p-6 sm:p-8 shadow-sm">
           <div class="flex items-center justify-between pb-4 border-b border-[#DFCDB7] mb-4">
@@ -257,8 +256,8 @@
             <table class="w-full text-left text-xs">
               <thead>
                 <tr class="text-[10px] font-bold text-[#8C5D38] uppercase tracking-wider border-b border-[#DFCDB7]">
-                  <th class="py-3 px-3">Parent Name</th>
-                  <th class="py-3 px-3">Phone</th>
+                  <th class="py-3 px-3">Parent Details</th>
+                  <th class="py-3 px-3">Contact Number</th>
                   <th class="py-3 px-3">Child Name</th>
                   <th class="py-3 px-3">Grade</th>
                   <th class="py-3 px-3">Locality & Bus</th>
@@ -295,7 +294,7 @@
   </div>
 
   <script>
-    // 1. Firebase Configuration & Init
+    // Firebase Configuration & Init
     const firebaseConfig = {
       apiKey: "AIzaSyAmcWWCnbruwSv_QFk2I60TyxYefqH4hHc",
       authDomain: "wonder-kids-school.firebaseapp.com",
@@ -386,9 +385,7 @@
       lucide.createIcons();
     }
 
-    // ===============================================
-    // 1. GALLERY LOGIC (UPLOAD & VIEW)
-    // ===============================================
+    // GALLERY LOGIC
     async function handleGalleryPublish(e) {
       e.preventDefault();
       const title = document.getElementById('photoTitle').value.trim();
@@ -460,9 +457,7 @@
       }
     }
 
-    // ===============================================
-    // 2. ACHIEVEMENTS & NOTICES LOGIC
-    // ===============================================
+    // ACHIEVEMENTS & NOTICES
     async function handleAchievementPublish(e) {
       e.preventDefault();
       try {
@@ -498,9 +493,7 @@
       }
     }
 
-    // ===============================================
-    // 3. ADMISSION LEADS LOGIC
-    // ===============================================
+    // ADMISSION LEADS (WITH DUAL WHATSAPP + DIRECT MAIL ACCEPT)
     async function loadAdmissionLeads() {
       const tbody = document.getElementById('leadsTableBody');
       tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-xs text-[#8C5D38]">Loading cloud leads from Firebase...</td></tr>`;
@@ -523,16 +516,30 @@
         docs.forEach((l) => {
           const tr = document.createElement('tr');
           tr.className = "hover:bg-[#FAF7F2] transition";
+          
+          const mailSubject = encodeURIComponent(`Admission Application Accepted - Wonder Kids High School, Khammam`);
+          const mailBody = encodeURIComponent(`Dear ${l.parent_name || 'Parent'},\n\nGreetings from Wonder Kids High School, Khammam.\n\nWe are pleased to inform you that your child ${l.child_name || 'the student'}'s admission application for ${l.grade || 'the requested grade'} has been reviewed and accepted.\n\nPlease visit our campus along with original certificates to complete the enrolment formalities.\n\nWarm Regards,\nAdmissions Committee\nWonder Kids High School, Khammam\nContact: +91 88977 98251`);
+
           tr.innerHTML = `
-            <td class="py-3 px-3 font-bold text-[#26170E]">${l.parent_name || 'N/A'}</td>
-            <td class="py-3 px-3"><a href="tel:${l.phone}" class="text-emerald-700 font-bold hover:underline">${l.phone || ''}</a></td>
+            <td class="py-3 px-3">
+              <span class="font-bold text-[#26170E] block">${l.parent_name || 'N/A'}</span>
+              <span class="text-[10px] text-[#7A6453]">${l.email || 'No Email Provided'}</span>
+            </td>
+            <td class="py-3 px-3">
+              <a href="tel:${l.phone}" class="text-emerald-700 font-bold hover:underline">${l.phone || ''}</a>
+            </td>
             <td class="py-3 px-3">${l.child_name || 'N/A'}</td>
             <td class="py-3 px-3 font-semibold text-[#663F24]">${l.grade || ''}</td>
             <td class="py-3 px-3 text-[#7A6453]">${l.locality || 'Khammam'}</td>
             <td class="py-3 px-3 text-right">
-              <a href="https://wa.me/91${(l.phone || '').replace(/[^0-9]/g, '')}" target="_blank" class="px-2.5 py-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 text-[10px] font-bold rounded-lg transition">
-                WhatsApp
-              </a>
+              <div class="flex flex-col sm:flex-row gap-1.5 justify-end">
+                <a href="https://wa.me/91${(l.phone || '').replace(/[^0-9]/g, '')}" target="_blank" class="px-2.5 py-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 text-[10px] font-bold rounded-lg transition text-center whitespace-nowrap">
+                  WhatsApp
+                </a>
+                <a href="mailto:${l.email || ''}?subject=${mailSubject}&body=${mailBody}" class="px-2.5 py-1 bg-blue-100 hover:bg-blue-200 text-blue-800 text-[10px] font-bold rounded-lg transition text-center whitespace-nowrap ${!l.email ? 'opacity-40 pointer-events-none' : ''}">
+                  Mail Accept
+                </a>
+              </div>
             </td>
           `;
           tbody.appendChild(tr);

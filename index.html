@@ -6,16 +6,16 @@
   <title>Wonder Kids High School | Khammam, Telangana</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Firebase App & Firestore SDKs (Compat version for reliable browser JS) -->
+  <!-- Firebase App & Firestore SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
   <style>
     html { scroll-behavior: smooth; }
     body { font-family: 'Plus Jakarta Sans', sans-serif; }
-    .font-brand { font-family: 'Cinzel Decorative', serif; }
+    .font-brand { font-family: 'Michroma', sans-serif; }
     .font-heading { font-family: 'Playfair Display', serif; }
     .chat-scroll::-webkit-scrollbar { width: 4px; }
     .chat-scroll::-webkit-scrollbar-thumb { background: #d7c9b8; border-radius: 4px; }
@@ -31,7 +31,7 @@
 </head>
 <body class="bg-[#FAF7F2] text-[#3D2C20] font-sans antialiased selection:bg-[#8C5D38] selection:text-white pb-12">
 
-  <!-- TOUR CAMPUS MODAL -->
+  <!-- CAMPUS TOUR MODAL -->
   <div id="campusTourModal" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-[#FAF7F2] rounded-3xl border border-[#DFCDB7] shadow-2xl max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden">
       <div class="p-4 bg-[#2D1B10] text-white flex items-center justify-between border-b border-[#442B1A]">
@@ -248,7 +248,7 @@
     </div>
   </section>
 
-  <!-- 1. CAMPUSES -->
+  <!-- 1. CAMPUSES (SLIDER) -->
   <section id="campuses" class="py-14 px-4 sm:px-6 max-w-6xl mx-auto border-t border-[#DFCDB7]">
     <div class="text-center mb-8">
       <span class="text-xs font-semibold uppercase tracking-wider text-[#A05C26] flex items-center justify-center gap-2">
@@ -372,7 +372,7 @@
     </div>
   </section>
 
-  <!-- 3. FACULTY & ACTIVITIES -->
+  <!-- 3. FACULTY & ACTIVITIES (SLIDER) -->
   <section id="faculty-activities" class="py-14 px-4 sm:px-6 max-w-6xl mx-auto border-t border-[#DFCDB7]">
     <div class="max-w-3xl mb-8">
       <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#A05C26] mb-2">
@@ -446,7 +446,7 @@
     </div>
   </section>
 
-  <!-- 4. SPORTS & FITNESS -->
+  <!-- 4. SPORTS & FITNESS (SLIDER) -->
   <section id="sports" class="py-14 px-4 sm:px-6 max-w-6xl mx-auto border-t border-[#DFCDB7]">
     <div class="max-w-3xl mb-8">
       <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#A05C26] mb-2">
@@ -525,7 +525,7 @@
     </div>
   </section>
 
-  <!-- 5. ACHIEVEMENTS -->
+  <!-- 5. ACHIEVEMENTS (SLIDER) -->
   <section id="achievements" class="py-14 bg-[#F5EFEB] px-4 sm:px-6 border-y border-[#DFCDB7]">
     <div class="max-w-6xl mx-auto">
       <div class="text-center mb-8">
@@ -604,7 +604,7 @@
     </div>
   </section>
 
-  <!-- 6. PHOTO GALLERY -->
+  <!-- 6. PHOTO GALLERY ("Special Moments") -->
   <section id="gallery" class="py-14 px-4 sm:px-6 bg-[#26170E] text-white">
     <div class="max-w-6xl mx-auto">
       <div class="text-center mb-8">
@@ -721,7 +721,7 @@
     </div>
   </section>
 
-  <!-- 8. ADMISSION REGISTRATION FORM -->
+  <!-- 8. ADMISSION REGISTRATION FORM (WITH EMAIL & FIREBASE) -->
   <section id="admissions" class="py-14 px-4 sm:px-6 max-w-4xl mx-auto">
     <div class="bg-[#F5EFEB] border border-[#DFCDB7] rounded-3xl p-6 sm:p-10 shadow-lg">
       <div class="text-center mb-8">
@@ -731,7 +731,7 @@
       </div>
 
       <form onsubmit="return handleFormSubmit(event)" class="space-y-4">
-        <div class="grid md:grid-cols-2 gap-4">
+        <div class="grid md:grid-cols-3 gap-4">
           <div>
             <label class="block text-xs font-semibold text-[#4B3728] uppercase mb-1">Parent's Name *</label>
             <input id="inputParent" type="text" required placeholder="e.g. Rajesh Kumar" class="w-full px-4 py-2.5 rounded-xl border border-[#D5C2A8] bg-[#FAF7F2] focus:outline-none focus:ring-2 focus:ring-[#8C5D38] text-sm">
@@ -739,6 +739,10 @@
           <div>
             <label class="block text-xs font-semibold text-[#4B3728] uppercase mb-1">Contact Number *</label>
             <input id="inputPhone" type="tel" required placeholder="e.g. 9876543210" class="w-full px-4 py-2.5 rounded-xl border border-[#D5C2A8] bg-[#FAF7F2] focus:outline-none focus:ring-2 focus:ring-[#8C5D38] text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-[#4B3728] uppercase mb-1">Parent Email ID *</label>
+            <input id="inputEmail" type="email" required placeholder="parent@gmail.com" class="w-full px-4 py-2.5 rounded-xl border border-[#D5C2A8] bg-[#FAF7F2] focus:outline-none focus:ring-2 focus:ring-[#8C5D38] text-sm">
           </div>
         </div>
 
@@ -936,7 +940,7 @@
   <script>
     lucide.createIcons();
 
-    // 1. Firebase Single Initialization
+    // Firebase Single Init
     const firebaseConfig = {
       apiKey: "AIzaSyAmcWWCnbruwSv_QFk2I60TyxYefqH4hHc",
       authDomain: "wonder-kids-school.firebaseapp.com",
@@ -951,7 +955,7 @@
     }
     const db = firebase.firestore();
 
-    // 2. Admission Form Handler (Direct Firestore Await + Background Email + Instant WhatsApp)
+    // Admission Form Submission (Firebase + Email Dispatch + WhatsApp)
     async function handleFormSubmit(e) {
       if (e) {
         e.preventDefault();
@@ -966,15 +970,17 @@
 
       const parentName = (document.getElementById('inputParent')?.value || '').trim();
       const phone = (document.getElementById('inputPhone')?.value || '').trim();
+      const email = (document.getElementById('inputEmail')?.value || '').trim();
       const childName = (document.getElementById('inputChild')?.value || '').trim() || 'N/A';
       const grade = document.getElementById('inputGrade')?.value || 'Nursery';
       const locality = (document.getElementById('inputLocality')?.value || '').trim() || 'Khammam';
 
-      // 1. Insert into Firebase Cloud DB
+      // 1. Direct Firebase Insert
       try {
         await db.collection("admissions").add({
           parent_name: parentName,
           phone: phone,
+          email: email,
           child_name: childName,
           grade: grade,
           locality: locality,
@@ -984,15 +990,17 @@
         console.error("Firebase write error:", err);
       }
 
-      // 2. Background Email Dispatch
+      // 2. Email Dispatch with Direct Reply-To Parent
       try {
         fetch("https://formsubmit.co/ajax/chellurichandu13@gmail.com", {
           method: "POST",
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
           body: JSON.stringify({
             _subject: `New Admission Inquiry - ${childName} (${grade})`,
+            _replyto: email,
             Parent_Name: parentName,
             Contact_Number: phone,
+            Parent_Email: email,
             Student_Name: childName,
             Grade_Applying: grade,
             Locality_and_Bus: locality,
@@ -1001,11 +1009,12 @@
         });
       } catch (err) {}
 
-      // 3. WhatsApp Redirect
+      // 3. Instant WhatsApp forward
       const myWhatsApp = "918897798251";
       const message = `*New Admission Application - Wonder Kids*%0A%0A` +
                       `*Parent Name:* ${encodeURIComponent(parentName)}%0A` +
                       `*Phone:* ${encodeURIComponent(phone)}%0A` +
+                      `*Email:* ${encodeURIComponent(email)}%0A` +
                       `*Child Name:* ${encodeURIComponent(childName)}%0A` +
                       `*Grade:* ${encodeURIComponent(grade)}%0A` +
                       `*Locality:* ${encodeURIComponent(locality)}%0A%0A` +
@@ -1018,7 +1027,6 @@
       return false;
     }
 
-    // Modal & Slider Controls
     function closeAdmissionPopup() {
       const popup = document.getElementById('admissionPopup');
       if (popup) popup.classList.add('hidden');
@@ -1086,7 +1094,6 @@
       document.getElementById('fullGalleryModal').classList.add('hidden');
     }
 
-    // Language Translations
     const translations = {
       en: {
         nav_vision: "Vision",
@@ -1134,7 +1141,6 @@
       }
     }
 
-    // AI Helpdesk Chat Logic
     function toggleChat() {
       const modal = document.getElementById('chatModal');
       modal.classList.toggle('hidden');
