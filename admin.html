@@ -9,14 +9,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Supabase JS Client -->
   <!-- Firebase App & Firestore SDKs -->
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
   <style>
     body { font-family: 'Plus Jakarta Sans', sans-serif; }
     .font-brand { font-family: 'Cinzel Decorative', serif; }
     .font-heading { font-family: 'Playfair Display', serif; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
 <body class="bg-[#FAF7F2] text-[#3D2C20] min-h-screen antialiased selection:bg-[#8C5D38] selection:text-white">
@@ -59,7 +60,7 @@
     </div>
   </div>
 
-  <!-- 2. MANAGEMENT APP -->
+  <!-- 2. MANAGEMENT DASHBOARD -->
   <div id="dashboardApp" class="hidden pb-16">
     <header class="bg-[#2D1B10] text-white px-6 py-4 border-b border-[#442B1A] sticky top-0 z-30 shadow-md">
       <div class="max-w-7xl mx-auto flex items-center justify-between flex-wrap gap-4">
@@ -76,19 +77,22 @@
           </div>
         </div>
 
-        <!-- Navigation Tabs -->
+        <!-- Full Navigation Bar Tabs -->
         <div class="flex items-center gap-1.5 bg-[#442B1A] p-1 rounded-2xl border border-[#5C3820] overflow-x-auto no-scrollbar">
-          <button id="tabLeads" onclick="switchTab('leads')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#663F24] text-white flex items-center gap-1.5 transition shadow-sm">
-            <i data-lucide="user-check" class="w-4 h-4"></i> Admissions
-          </button>
-          <button id="tabGallery" onclick="switchTab('gallery')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-[#E8DCCB] hover:text-white flex items-center gap-1.5 transition">
+          <button id="tabGallery" onclick="switchTab('gallery')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#663F24] text-white flex items-center gap-1.5 transition shadow-sm">
             <i data-lucide="image" class="w-4 h-4"></i> Gallery
+          </button>
+          <button id="tabAchievements" onclick="switchTab('achievements')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-[#E8DCCB] hover:text-white flex items-center gap-1.5 transition">
+            <i data-lucide="award" class="w-4 h-4"></i> Achievements
           </button>
           <button id="tabNotices" onclick="switchTab('notices')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-[#E8DCCB] hover:text-white flex items-center gap-1.5 transition">
             <i data-lucide="bell" class="w-4 h-4"></i> Notices
           </button>
+          <button id="tabLeads" onclick="switchTab('leads')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-[#E8DCCB] hover:text-white flex items-center gap-1.5 transition">
+            <i data-lucide="user-check" class="w-4 h-4"></i> Admissions
+          </button>
           <button id="tabSettings" onclick="switchTab('settings')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-[#E8DCCB] hover:text-white flex items-center gap-1.5 transition">
-            <i data-lucide="settings" class="w-4 h-4"></i> Settings
+            <i data-lucide="settings" class="w-4 h-4"></i> Site Settings
           </button>
         </div>
 
@@ -105,13 +109,144 @@
 
     <main class="max-w-6xl mx-auto px-6 py-8">
 
-      <!-- TAB 1: ADMISSION LEADS (SUPABASE CLOUD LIVE) -->
-      <section id="secLeads" class="space-y-6">
-        <div class="bg-[#F5EFEB] rounded-3xl border border-[#DFCDB7] p-6 shadow-sm">
+      <!-- TAB 1: GALLERY (MATCHING OLD SCREENSHOT) -->
+      <section id="secGallery" class="space-y-6">
+        <div class="bg-[#F5EFEB] rounded-3xl border border-[#DFCDB7] p-6 sm:p-8 shadow-sm">
+          <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#A05C26] mb-1">
+            <i data-lucide="upload-cloud" class="w-4 h-4"></i> UPLOAD MEDIA
+          </div>
+          <h2 class="text-xl sm:text-2xl font-heading font-bold text-[#26170E] mb-6">Add Photo to "Special Moments" Gallery</h2>
+
+          <form onsubmit="handleGalleryPublish(event)" class="space-y-5">
+            <div class="grid sm:grid-cols-12 gap-4">
+              <div class="sm:col-span-8">
+                <label class="block text-[11px] font-bold uppercase text-[#4B3728] mb-1">PHOTO CAPTION / EVENT TITLE *</label>
+                <input id="photoTitle" type="text" required placeholder="e.g. GRADE 5 - ANNUAL SCIENCE & ROBOTICS EXPO" class="w-full px-4 py-2.5 rounded-xl border border-[#D5C2A8] bg-[#FAF7F2] text-xs outline-none focus:ring-2 focus:ring-[#8C5D38]">
+              </div>
+              <div class="sm:col-span-4">
+                <label class="block text-[11px] font-bold uppercase text-[#4B3728] mb-1">EVENT CATEGORY</label>
+                <select id="photoCategory" class="w-full px-4 py-2.5 rounded-xl border border-[#D5C2A8] bg-[#FAF7F2] text-xs outline-none focus:ring-2 focus:ring-[#8C5D38]">
+                  <option value="Class Assembly">Class Assembly</option>
+                  <option value="Science Exhibition">Science Exhibition</option>
+                  <option value="Sports Meet">Sports Meet</option>
+                  <option value="Craft & Activities">Craft & Activities</option>
+                  <option value="Celebrations">Celebrations</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold uppercase text-[#4B3728] mb-1">UPLOAD PHOTO (PHONE CAMERA / GALLERY OR IMAGE URL) *</label>
+              <div class="flex flex-col sm:flex-row items-center gap-3">
+                <label class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-[#663F24] hover:bg-[#4E2E18] text-white text-xs font-bold cursor-pointer transition text-center whitespace-nowrap">
+                  Choose File
+                  <input type="file" id="photoFileInput" accept="image/*" class="hidden" onchange="handleFileSelection(event)">
+                </label>
+                <span id="fileChosenLabel" class="text-xs text-[#7A6453] italic">No file chosen</span>
+                <span class="text-xs font-bold text-[#8C5D38]">OR</span>
+                <input id="photoUrl" type="url" placeholder="https://images.unsplash.com/... direct link" class="flex-1 w-full px-4 py-2.5 rounded-xl border border-[#D5C2A8] bg-[#FAF7F2] text-xs outline-none focus:ring-2 focus:ring-[#8C5D38]">
+              </div>
+            </div>
+
+            <div class="flex justify-end pt-2">
+              <button type="submit" id="gallerySubmitBtn" class="px-6 py-3 bg-[#3A2415] hover:bg-[#201309] text-white font-bold text-xs rounded-xl transition shadow-md flex items-center gap-2">
+                <i data-lucide="upload" class="w-4 h-4"></i>
+                <span>Publish to Live Gallery</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Live Published Photos Grid -->
+        <div class="bg-[#F5EFEB] rounded-3xl border border-[#DFCDB7] p-6 sm:p-8 shadow-sm">
+          <div class="flex items-center justify-between pb-4 border-b border-[#DFCDB7] mb-6">
+            <div>
+              <h3 class="text-lg font-heading font-bold text-[#26170E]">Live Published Photos</h3>
+              <p id="photosCount" class="text-xs text-[#7A6453]">0 custom photos uploaded</p>
+            </div>
+            <button onclick="loadPublishedPhotos()" class="px-3.5 py-1.5 rounded-xl bg-[#FAF7F2] border border-[#DFCDB7] hover:bg-[#EAE0D2] text-xs font-bold flex items-center gap-1.5 transition">
+              <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i> Refresh
+            </button>
+          </div>
+          <div id="galleryContainer" class="text-center py-8 text-xs text-[#7A6453]">
+            No custom photos added yet. Upload using the form above!
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: ACHIEVEMENTS -->
+      <section id="secAchievements" class="hidden space-y-6">
+        <div class="bg-[#F5EFEB] rounded-3xl border border-[#DFCDB7] p-6 sm:p-8 shadow-sm">
+          <h2 class="text-xl font-heading font-bold text-[#26170E] mb-4">Post Student Merit & Honor Award</h2>
+          <form onsubmit="handleAchievementPublish(event)" class="space-y-4">
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-[11px] font-bold uppercase text-[#4B3728] mb-1">Student / Team Name *</label>
+                <input id="achName" type="text" required placeholder="e.g. Bhuvan Tripathi (Class VII)" class="w-full px-3.5 py-2.5 rounded-xl border border-[#D5C2A8] bg-[#FAF7F2] text-xs outline-none focus:ring-2 focus:ring-[#8C5D38]">
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold uppercase text-[#4B3728] mb-1">Category / Level</label>
+                <input id="achCategory" type="text" placeholder="e.g. STATE & NATIONAL CAMP" class="w-full px-3.5 py-2.5 rounded-xl border border-[#D5C2A8] bg-[#FAF7F2] text-xs outline-none focus:ring-2 focus:ring-[#8C5D38]">
+              </div>
+            </div>
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-[11px] font-bold uppercase text-[#4B3728] mb-1">Award Title *</label>
+                <input id="achTitle" type="text" required placeholder="e.g. VVM National Camp 2026 Selection" class="w-full px-3.5 py-2.5 rounded-xl border border-[#D5C2A8] bg-[#FAF7F2] text-xs outline-none focus:ring-2 focus:ring-[#8C5D38]">
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold uppercase text-[#4B3728] mb-1">Photo Image URL</label>
+                <input id="achUrl" type="url" placeholder="https://..." class="w-full px-3.5 py-2.5 rounded-xl border border-[#D5C2A8] bg-[#FAF7F2] text-xs outline-none focus:ring-2 focus:ring-[#8C5D38]">
+              </div>
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold uppercase text-[#4B3728] mb-1">Award Details & Accomplishment *</label>
+              <textarea id="achDesc" required rows="2" placeholder="Won 2nd prize at state camp and qualified for finals..." class="w-full px-3.5 py-2.5 rounded-xl border border-[#D5C2A8] bg-[#FAF7F2] text-xs outline-none focus:ring-2 focus:ring-[#8C5D38]"></textarea>
+            </div>
+            <div class="flex justify-end">
+              <button type="submit" class="px-6 py-2.5 bg-[#663F24] hover:bg-[#4E2E18] text-white font-bold text-xs rounded-xl transition shadow-md">Publish Achievement</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- TAB 3: NOTICES -->
+      <section id="secNotices" class="hidden space-y-6">
+        <div class="bg-[#F5EFEB] rounded-3xl border border-[#DFCDB7] p-6 sm:p-8 shadow-sm">
+          <h2 class="text-xl font-heading font-bold text-[#26170E] mb-4">Post School Circular / Notice</h2>
+          <form onsubmit="handleNoticePublish(event)" class="space-y-4">
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-[11px] font-bold uppercase text-[#4B3728] mb-1">Tag *</label>
+                <input id="noticeTag" type="text" required placeholder="CIRCULAR / ANNOUNCEMENT" class="w-full px-3.5 py-2.5 rounded-xl border border-[#D5C2A8] bg-[#FAF7F2] text-xs outline-none focus:ring-2 focus:ring-[#8C5D38]">
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold uppercase text-[#4B3728] mb-1">Department</label>
+                <input id="noticeDept" type="text" placeholder="Principal's Office" class="w-full px-3.5 py-2.5 rounded-xl border border-[#D5C2A8] bg-[#FAF7F2] text-xs outline-none focus:ring-2 focus:ring-[#8C5D38]">
+              </div>
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold uppercase text-[#4B3728] mb-1">Title *</label>
+              <input id="noticeTitle" type="text" required placeholder="Notice Heading" class="w-full px-3.5 py-2.5 rounded-xl border border-[#D5C2A8] bg-[#FAF7F2] text-xs outline-none focus:ring-2 focus:ring-[#8C5D38]">
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold uppercase text-[#4B3728] mb-1">Description *</label>
+              <textarea id="noticeDesc" required rows="3" placeholder="Notice details..." class="w-full px-3.5 py-2.5 rounded-xl border border-[#D5C2A8] bg-[#FAF7F2] text-xs outline-none focus:ring-2 focus:ring-[#8C5D38]"></textarea>
+            </div>
+            <div class="flex justify-end">
+              <button type="submit" class="px-6 py-2.5 bg-[#663F24] hover:bg-[#4E2E18] text-white font-bold text-xs rounded-xl transition shadow-md">Publish Notice</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- TAB 4: ADMISSIONS (LIVE CLOUD FIRESTORE) -->
+      <section id="secLeads" class="hidden space-y-6">
+        <div class="bg-[#F5EFEB] rounded-3xl border border-[#DFCDB7] p-6 sm:p-8 shadow-sm">
           <div class="flex items-center justify-between pb-4 border-b border-[#DFCDB7] mb-4">
             <div>
               <h3 class="text-lg font-heading font-bold text-[#26170E]">Live Cloud Admission Applications</h3>
-              <p id="leadCount" class="text-xs text-[#7A6453]">Connected to Supabase PostgreSQL cloud table</p>
+              <p id="leadCount" class="text-xs text-[#7A6453]">Connected to Firebase Firestore Cloud DB</p>
             </div>
             <button onclick="loadAdmissionLeads()" class="px-3.5 py-1.5 rounded-xl bg-[#FAF7F2] border border-[#DFCDB7] hover:bg-[#EAE0D2] text-xs font-bold flex items-center gap-1.5 transition">
               <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i> Refresh Leads
@@ -136,58 +271,10 @@
         </div>
       </section>
 
-      <!-- TAB 2: GALLERY -->
-      <section id="secGallery" class="hidden space-y-6">
-        <div class="bg-[#F5EFEB] rounded-3xl border border-[#DFCDB7] p-6 shadow-sm">
-          <h2 class="text-xl font-heading font-bold text-[#26170E] mb-2">Publish Photo to Gallery</h2>
-          <form onsubmit="handleGalleryPublish(event)" class="grid sm:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-[11px] font-bold uppercase text-[#4B3728] mb-1">Photo Title *</label>
-              <input id="photoTitle" type="text" required placeholder="Event Name" class="w-full px-3.5 py-2.5 rounded-xl border border-[#D5C2A8] bg-[#FAF7F2] text-xs outline-none focus:ring-2 focus:ring-[#8C5D38]">
-            </div>
-            <div>
-              <label class="block text-[11px] font-bold uppercase text-[#4B3728] mb-1">Image URL *</label>
-              <input id="photoUrl" type="url" required placeholder="https://..." class="w-full px-3.5 py-2.5 rounded-xl border border-[#D5C2A8] bg-[#FAF7F2] text-xs outline-none focus:ring-2 focus:ring-[#8C5D38]">
-            </div>
-            <div class="sm:col-span-2 flex justify-end">
-              <button type="submit" class="px-6 py-2.5 bg-[#663F24] hover:bg-[#4E2E18] text-white font-bold text-xs rounded-xl transition shadow-md">Publish to Cloud</button>
-            </div>
-          </form>
-        </div>
-      </section>
-
-      <!-- TAB 3: NOTICES -->
-      <section id="secNotices" class="hidden space-y-6">
-        <div class="bg-[#F5EFEB] rounded-3xl border border-[#DFCDB7] p-6 shadow-sm">
-          <h2 class="text-xl font-heading font-bold text-[#26170E] mb-2">Publish School Notice</h2>
-          <form onsubmit="handleNoticePublish(event)" class="grid sm:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-[11px] font-bold uppercase text-[#4B3728] mb-1">Tag (e.g. Circular) *</label>
-              <input id="noticeTag" type="text" required placeholder="CIRCULAR" class="w-full px-3.5 py-2.5 rounded-xl border border-[#D5C2A8] bg-[#FAF7F2] text-xs outline-none focus:ring-2 focus:ring-[#8C5D38]">
-            </div>
-            <div>
-              <label class="block text-[11px] font-bold uppercase text-[#4B3728] mb-1">Department</label>
-              <input id="noticeDept" type="text" placeholder="Academic Cell" class="w-full px-3.5 py-2.5 rounded-xl border border-[#D5C2A8] bg-[#FAF7F2] text-xs outline-none focus:ring-2 focus:ring-[#8C5D38]">
-            </div>
-            <div class="sm:col-span-2">
-              <label class="block text-[11px] font-bold uppercase text-[#4B3728] mb-1">Title *</label>
-              <input id="noticeTitle" type="text" required placeholder="Notice Heading" class="w-full px-3.5 py-2.5 rounded-xl border border-[#D5C2A8] bg-[#FAF7F2] text-xs outline-none focus:ring-2 focus:ring-[#8C5D38]">
-            </div>
-            <div class="sm:col-span-2">
-              <label class="block text-[11px] font-bold uppercase text-[#4B3728] mb-1">Description *</label>
-              <textarea id="noticeDesc" required rows="2" class="w-full px-3.5 py-2.5 rounded-xl border border-[#D5C2A8] bg-[#FAF7F2] text-xs outline-none focus:ring-2 focus:ring-[#8C5D38]"></textarea>
-            </div>
-            <div class="sm:col-span-2 flex justify-end">
-              <button type="submit" class="px-6 py-2.5 bg-[#663F24] hover:bg-[#4E2E18] text-white font-bold text-xs rounded-xl transition shadow-md">Post Notice</button>
-            </div>
-          </form>
-        </div>
-      </section>
-
-      <!-- TAB 4: SETTINGS & PASSWORD -->
+      <!-- TAB 5: SITE SETTINGS -->
       <section id="secSettings" class="hidden space-y-6">
-        <div class="bg-[#F5EFEB] rounded-3xl border border-[#DFCDB7] p-6 shadow-sm">
-          <h2 class="text-xl font-heading font-bold text-[#26170E] mb-2">Change Admin Password</h2>
+        <div class="bg-[#F5EFEB] rounded-3xl border border-[#DFCDB7] p-6 sm:p-8 shadow-sm">
+          <h2 class="text-xl font-heading font-bold text-[#26170E] mb-4">Change Admin Credentials</h2>
           <form onsubmit="handleChangeCredentials(event)" class="grid sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-[11px] font-bold uppercase text-[#4B3728] mb-1">Username *</label>
@@ -208,67 +295,33 @@
   </div>
 
   <script>
-    // Supabase Live Client
-   // Firebase Configuration & Init
-const firebaseConfig = {
-  apiKey: "AIzaSyAmcWWCnbruwSv_QFk2I60TyxYefqH4hHc",
-  authDomain: "wonder-kids-school.firebaseapp.com",
-  projectId: "wonder-kids-school",
-  storageBucket: "wonder-kids-school.firebasestorage.app",
-  messagingSenderId: "145902244646",
-  appId: "1:145902244646:web:082492321059b3a079a7e7"
-};
+    // 1. Firebase Configuration & Init
+    const firebaseConfig = {
+      apiKey: "AIzaSyAmcWWCnbruwSv_QFk2I60TyxYefqH4hHc",
+      authDomain: "wonder-kids-school.firebaseapp.com",
+      projectId: "wonder-kids-school",
+      storageBucket: "wonder-kids-school.firebasestorage.app",
+      messagingSenderId: "145902244646",
+      appId: "1:145902244646:web:082492321059b3a079a7e7"
+    };
 
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
-const db = firebase.firestore();
-
-async function loadAdmissionLeads() {
-  const tbody = document.getElementById('leadsTableBody');
-  tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-xs text-[#8C5D38]">Loading cloud leads from Firebase...</td></tr>`;
-
-  try {
-    const snapshot = await db.collection("admissions").orderBy("created_at", "desc").get();
-
-    if (snapshot.empty) {
-      tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-xs text-[#8C5D38]">No admission inquiries found in Firebase cloud.</td></tr>`;
-      document.getElementById('leadCount').innerText = `0 Admission inquiries received`;
-      return;
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
     }
+    const db = firebase.firestore();
 
-    document.getElementById('leadCount').innerText = `${snapshot.size} Admission inquiries in cloud`;
-    tbody.innerHTML = '';
+    let uploadedBase64Image = null;
 
-    snapshot.forEach((doc) => {
-      const l = doc.data();
-      const tr = document.createElement('tr');
-      tr.className = "hover:bg-[#FAF7F2] transition";
-      tr.innerHTML = `
-        <td class="py-3 px-3 font-bold text-[#26170E]">${l.parent_name || 'N/A'}</td>
-        <td class="py-3 px-3"><a href="tel:${l.phone}" class="text-emerald-700 font-bold hover:underline">${l.phone || ''}</a></td>
-        <td class="py-3 px-3">${l.child_name || 'N/A'}</td>
-        <td class="py-3 px-3 font-semibold text-[#663F24]">${l.grade || ''}</td>
-        <td class="py-3 px-3 text-[#7A6453]">${l.locality || 'Khammam'}</td>
-        <td class="py-3 px-3 text-right">
-          <a href="https://wa.me/91${(l.phone || '').replace(/[^0-9]/g, '')}" target="_blank" class="px-2.5 py-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 text-[10px] font-bold rounded-lg transition">
-            WhatsApp
-          </a>
-        </td>
-      `;
-      tbody.appendChild(tr);
-    });
-    lucide.createIcons();
-  } catch (err) {
-    console.error("Firestore read error:", err);
-    tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-xs text-rose-700">Error connecting to Firebase Firestore.</td></tr>`;
-  }
-}
-    const SUPABASE_ANON_KEY = "sb_publishable_-jDZRF9Pq9QHP0bIABHv6w_J6DmtqVk";
-    let supabaseClient = null;
+    function handleFileSelection(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      document.getElementById('fileChosenLabel').innerText = file.name;
 
-    if (window.supabase) {
-      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        uploadedBase64Image = evt.target.result;
+      };
+      reader.readAsDataURL(file);
     }
 
     function getAdminAuth() {
@@ -282,7 +335,7 @@ async function loadAdmissionLeads() {
       if (isAuth === 'true') {
         document.getElementById('loginOverlay').classList.add('hidden');
         document.getElementById('dashboardApp').classList.remove('hidden');
-        loadAdmissionLeads();
+        loadPublishedPhotos();
         lucide.createIcons();
       }
     }
@@ -297,7 +350,7 @@ async function loadAdmissionLeads() {
         sessionStorage.setItem('wonderkids_admin_logged_in', 'true');
         document.getElementById('loginOverlay').classList.add('hidden');
         document.getElementById('dashboardApp').classList.remove('hidden');
-        loadAdmissionLeads();
+        loadPublishedPhotos();
         lucide.createIcons();
       } else {
         document.getElementById('loginError').classList.remove('hidden');
@@ -320,7 +373,7 @@ async function loadAdmissionLeads() {
     }
 
     function switchTab(tabId) {
-      ['leads', 'gallery', 'notices', 'settings'].forEach(t => {
+      ['gallery', 'achievements', 'notices', 'leads', 'settings'].forEach(t => {
         document.getElementById(`sec${t.charAt(0).toUpperCase() + t.slice(1)}`).classList.add('hidden');
         document.getElementById(`tab${t.charAt(0).toUpperCase() + t.slice(1)}`).className = "px-3.5 py-1.5 rounded-xl text-xs font-bold text-[#E8DCCB] hover:text-white flex items-center gap-1.5 transition";
       });
@@ -329,80 +382,164 @@ async function loadAdmissionLeads() {
       document.getElementById(`tab${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`).className = "px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#663F24] text-white flex items-center gap-1.5 transition shadow-sm";
 
       if (tabId === 'leads') loadAdmissionLeads();
+      if (tabId === 'gallery') loadPublishedPhotos();
       lucide.createIcons();
     }
 
     // ===============================================
-    // FETCH LIVE LEADS FROM SUPABASE POSTGRESQL
+    // 1. GALLERY LOGIC (UPLOAD & VIEW)
     // ===============================================
-    async function loadAdmissionLeads() {
-      const tbody = document.getElementById('leadsTableBody');
-      tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-xs text-[#8C5D38]">Loading cloud leads...</td></tr>`;
-
-      if (!supabaseClient) {
-        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-xs text-rose-700">Supabase client connection error.</td></tr>`;
-        return;
-      }
-
-      const { data: leads, error } = await supabaseClient
-        .from('admissions')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error || !leads || leads.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-xs text-[#8C5D38]">No admission inquiries found in cloud database.</td></tr>`;
-        document.getElementById('leadCount').innerText = `0 Admission inquiries received`;
-        return;
-      }
-
-      document.getElementById('leadCount').innerText = `${leads.length} Admission inquiries in cloud`;
-      tbody.innerHTML = '';
-
-      leads.forEach((l) => {
-        const tr = document.createElement('tr');
-        tr.className = "hover:bg-[#FAF7F2] transition";
-        tr.innerHTML = `
-          <td class="py-3 px-3 font-bold text-[#26170E]">${l.parent_name}</td>
-          <td class="py-3 px-3"><a href="tel:${l.phone}" class="text-emerald-700 font-bold hover:underline">${l.phone}</a></td>
-          <td class="py-3 px-3">${l.child_name || 'N/A'}</td>
-          <td class="py-3 px-3 font-semibold text-[#663F24]">${l.grade}</td>
-          <td class="py-3 px-3 text-[#7A6453]">${l.locality || 'Khammam'}</td>
-          <td class="py-3 px-3 text-right">
-            <a href="https://wa.me/91${l.phone.replace(/[^0-9]/g, '')}" target="_blank" class="px-2.5 py-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 text-[10px] font-bold rounded-lg transition">
-              WhatsApp
-            </a>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-      lucide.createIcons();
-    }
-
     async function handleGalleryPublish(e) {
       e.preventDefault();
       const title = document.getElementById('photoTitle').value.trim();
-      const image_url = document.getElementById('photoUrl').value.trim();
+      const category = document.getElementById('photoCategory').value;
+      const urlInput = document.getElementById('photoUrl').value.trim();
+      const imageUrl = uploadedBase64Image || urlInput;
 
-      const { error } = await supabaseClient.from('gallery').insert([{ title, image_url }]);
-      if (error) alert("Error publishing photo: " + error.message);
-      else {
-        alert("Photo successfully published to Supabase Cloud Gallery!");
+      if (!imageUrl) {
+        alert("Please choose an image file or provide an Image URL!");
+        return;
+      }
+
+      const btn = document.getElementById('gallerySubmitBtn');
+      btn.innerText = "Publishing to Cloud...";
+      btn.disabled = true;
+
+      try {
+        await db.collection("gallery").add({
+          title,
+          category,
+          image_url: imageUrl,
+          created_at: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        alert("Photo successfully published to Live Gallery!");
         e.target.reset();
+        uploadedBase64Image = null;
+        document.getElementById('fileChosenLabel').innerText = "No file chosen";
+        loadPublishedPhotos();
+      } catch (err) {
+        alert("Publish error: " + err.message);
+      } finally {
+        btn.innerText = "Publish to Live Gallery";
+        btn.disabled = false;
+        lucide.createIcons();
+      }
+    }
+
+    async function loadPublishedPhotos() {
+      const container = document.getElementById('galleryContainer');
+      const countLabel = document.getElementById('photosCount');
+
+      try {
+        const snapshot = await db.collection("gallery").get();
+        if (snapshot.empty) {
+          container.innerHTML = "No custom photos added yet. Upload using the form above!";
+          countLabel.innerText = "0 custom photos uploaded";
+          return;
+        }
+
+        countLabel.innerText = `${snapshot.size} custom photos uploaded`;
+        container.innerHTML = `<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-left"></div>`;
+        const grid = container.querySelector('div');
+
+        snapshot.forEach(doc => {
+          const p = doc.data();
+          const item = document.createElement('div');
+          item.className = "bg-white p-2.5 rounded-2xl border border-[#DFCDB7] shadow-sm";
+          item.innerHTML = `
+            <div class="h-32 rounded-xl overflow-hidden bg-[#FAF7F2] border border-[#EBE0D3]">
+              <img src="${p.image_url}" class="w-full h-full object-cover">
+            </div>
+            <p class="text-[10px] font-bold text-[#8C5D38] uppercase mt-2">${p.category || 'Special Moments'}</p>
+            <p class="text-xs font-bold text-[#26170E] line-clamp-1">${p.title}</p>
+          `;
+          grid.appendChild(item);
+        });
+      } catch (err) {
+        container.innerHTML = `<span class="text-rose-600">Error loading photos: ${err.message}</span>`;
+      }
+    }
+
+    // ===============================================
+    // 2. ACHIEVEMENTS & NOTICES LOGIC
+    // ===============================================
+    async function handleAchievementPublish(e) {
+      e.preventDefault();
+      try {
+        await db.collection("achievements").add({
+          student_name: document.getElementById('achName').value.trim(),
+          category: document.getElementById('achCategory').value.trim(),
+          title: document.getElementById('achTitle').value.trim(),
+          image_url: document.getElementById('achUrl').value.trim() || 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=600&q=80',
+          description: document.getElementById('achDesc').value.trim(),
+          created_at: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        alert("Achievement published to school site!");
+        e.target.reset();
+      } catch (err) {
+        alert("Error: " + err.message);
       }
     }
 
     async function handleNoticePublish(e) {
       e.preventDefault();
-      const tag = document.getElementById('noticeTag').value.trim();
-      const dept = document.getElementById('noticeDept').value.trim();
-      const title = document.getElementById('noticeTitle').value.trim();
-      const description = document.getElementById('noticeDesc').value.trim();
-
-      const { error } = await supabaseClient.from('notices').insert([{ tag, dept, title, description }]);
-      if (error) alert("Error posting notice: " + error.message);
-      else {
-        alert("Notice successfully posted to live site!");
+      try {
+        await db.collection("notices").add({
+          tag: document.getElementById('noticeTag').value.trim(),
+          dept: document.getElementById('noticeDept').value.trim(),
+          title: document.getElementById('noticeTitle').value.trim(),
+          description: document.getElementById('noticeDesc').value.trim(),
+          created_at: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        alert("Notice published successfully!");
         e.target.reset();
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    }
+
+    // ===============================================
+    // 3. ADMISSION LEADS LOGIC
+    // ===============================================
+    async function loadAdmissionLeads() {
+      const tbody = document.getElementById('leadsTableBody');
+      tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-xs text-[#8C5D38]">Loading cloud leads from Firebase...</td></tr>`;
+
+      try {
+        const snapshot = await db.collection("admissions").get();
+        if (snapshot.empty) {
+          tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-xs text-[#8C5D38]">No admission inquiries found in Firebase cloud.</td></tr>`;
+          document.getElementById('leadCount').innerText = `0 Admission inquiries received`;
+          return;
+        }
+
+        document.getElementById('leadCount').innerText = `${snapshot.size} Admission inquiries in cloud`;
+        tbody.innerHTML = '';
+
+        const docs = [];
+        snapshot.forEach(doc => docs.push(doc.data()));
+        docs.reverse();
+
+        docs.forEach((l) => {
+          const tr = document.createElement('tr');
+          tr.className = "hover:bg-[#FAF7F2] transition";
+          tr.innerHTML = `
+            <td class="py-3 px-3 font-bold text-[#26170E]">${l.parent_name || 'N/A'}</td>
+            <td class="py-3 px-3"><a href="tel:${l.phone}" class="text-emerald-700 font-bold hover:underline">${l.phone || ''}</a></td>
+            <td class="py-3 px-3">${l.child_name || 'N/A'}</td>
+            <td class="py-3 px-3 font-semibold text-[#663F24]">${l.grade || ''}</td>
+            <td class="py-3 px-3 text-[#7A6453]">${l.locality || 'Khammam'}</td>
+            <td class="py-3 px-3 text-right">
+              <a href="https://wa.me/91${(l.phone || '').replace(/[^0-9]/g, '')}" target="_blank" class="px-2.5 py-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 text-[10px] font-bold rounded-lg transition">
+                WhatsApp
+              </a>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+        lucide.createIcons();
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-xs text-rose-700">Firestore error: ${err.message}</td></tr>`;
       }
     }
 

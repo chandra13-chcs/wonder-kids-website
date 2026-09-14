@@ -9,10 +9,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Supabase JS Client -->
-  <!-- Firebase App & Firestore SDKs (Compat version for clean vanilla JS) -->
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <!-- Firebase App & Firestore SDKs (Compat version for reliable browser JS) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
   <style>
     html { scroll-behavior: smooth; }
     body { font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -249,7 +248,7 @@
     </div>
   </section>
 
-  <!-- 1. CAMPUSES (SLIDER) -->
+  <!-- 1. CAMPUSES -->
   <section id="campuses" class="py-14 px-4 sm:px-6 max-w-6xl mx-auto border-t border-[#DFCDB7]">
     <div class="text-center mb-8">
       <span class="text-xs font-semibold uppercase tracking-wider text-[#A05C26] flex items-center justify-center gap-2">
@@ -373,7 +372,7 @@
     </div>
   </section>
 
-  <!-- 3. FACULTY & ACTIVITIES (SLIDER) -->
+  <!-- 3. FACULTY & ACTIVITIES -->
   <section id="faculty-activities" class="py-14 px-4 sm:px-6 max-w-6xl mx-auto border-t border-[#DFCDB7]">
     <div class="max-w-3xl mb-8">
       <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#A05C26] mb-2">
@@ -447,7 +446,7 @@
     </div>
   </section>
 
-  <!-- 4. SPORTS & FITNESS (SLIDER) -->
+  <!-- 4. SPORTS & FITNESS -->
   <section id="sports" class="py-14 px-4 sm:px-6 max-w-6xl mx-auto border-t border-[#DFCDB7]">
     <div class="max-w-3xl mb-8">
       <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#A05C26] mb-2">
@@ -526,7 +525,7 @@
     </div>
   </section>
 
-  <!-- 5. ACHIEVEMENTS (SLIDER) -->
+  <!-- 5. ACHIEVEMENTS -->
   <section id="achievements" class="py-14 bg-[#F5EFEB] px-4 sm:px-6 border-y border-[#DFCDB7]">
     <div class="max-w-6xl mx-auto">
       <div class="text-center mb-8">
@@ -605,7 +604,7 @@
     </div>
   </section>
 
-  <!-- 6. PHOTO GALLERY ("Special Moments") -->
+  <!-- 6. PHOTO GALLERY -->
   <section id="gallery" class="py-14 px-4 sm:px-6 bg-[#26170E] text-white">
     <div class="max-w-6xl mx-auto">
       <div class="text-center mb-8">
@@ -728,7 +727,7 @@
       <div class="text-center mb-8">
         <span class="text-xs font-semibold uppercase tracking-wider text-[#A05C26]">Enrolment 2026-27</span>
         <h2 class="text-2xl md:text-3xl font-heading font-bold text-[#26170E] mt-1">Admission Registration</h2>
-        <p class="text-xs text-[#7A6453] mt-1">Submit your details. It dispatches directly to Supabase cloud DB, email & WhatsApp simultaneously.</p>
+        <p class="text-xs text-[#7A6453] mt-1">Submit your application. Saved directly to 24/7 Firebase cloud DB, email & WhatsApp.</p>
       </div>
 
       <form onsubmit="return handleFormSubmit(event)" class="space-y-4">
@@ -937,91 +936,89 @@
   <script>
     lucide.createIcons();
 
-    // Initialize Supabase Live Client
-    // Firebase Configuration & Init
-const firebaseConfig = {
-  apiKey: "AIzaSyAmcWWCnbruwSv_QFk2I60TyxYefqH4hHc",
-  authDomain: "wonder-kids-school.firebaseapp.com",
-  projectId: "wonder-kids-school",
-  storageBucket: "wonder-kids-school.firebasestorage.app",
-  messagingSenderId: "145902244646",
-  appId: "1:145902244646:web:082492321059b3a079a7e7"
-};
+    // 1. Firebase Single Initialization
+    const firebaseConfig = {
+      apiKey: "AIzaSyAmcWWCnbruwSv_QFk2I60TyxYefqH4hHc",
+      authDomain: "wonder-kids-school.firebaseapp.com",
+      projectId: "wonder-kids-school",
+      storageBucket: "wonder-kids-school.firebasestorage.app",
+      messagingSenderId: "145902244646",
+      appId: "1:145902244646:web:082492321059b3a079a7e7"
+    };
 
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
-const db = firebase.firestore();
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.firestore();
 
-async function handleFormSubmit(e) {
-  if (e) {
-    e.preventDefault();
-    e.stopPropagation();
-  }
+    // 2. Admission Form Handler (Direct Firestore Await + Background Email + Instant WhatsApp)
+    async function handleFormSubmit(e) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
 
-  const btn = document.getElementById('submitBtnLabel');
-  if (btn) {
-    btn.innerText = "Submitting Inquiry...";
-    btn.disabled = true;
-  }
+      const btn = document.getElementById('submitBtnLabel');
+      if (btn) {
+        btn.innerText = "Saving to Cloud DB...";
+        btn.disabled = true;
+      }
 
-  const parentName = (document.getElementById('inputParent')?.value || '').trim();
-  const phone = (document.getElementById('inputPhone')?.value || '').trim();
-  const childName = (document.getElementById('inputChild')?.value || '').trim() || 'N/A';
-  const grade = document.getElementById('inputGrade')?.value || 'Nursery';
-  const locality = (document.getElementById('inputLocality')?.value || '').trim() || 'Khammam';
+      const parentName = (document.getElementById('inputParent')?.value || '').trim();
+      const phone = (document.getElementById('inputPhone')?.value || '').trim();
+      const childName = (document.getElementById('inputChild')?.value || '').trim() || 'N/A';
+      const grade = document.getElementById('inputGrade')?.value || 'Nursery';
+      const locality = (document.getElementById('inputLocality')?.value || '').trim() || 'Khammam';
 
-  // 1. Insert into Firebase Firestore Cloud Database
-  try {
-    await db.collection("admissions").add({
-      parent_name: parentName,
-      phone: phone,
-      child_name: childName,
-      grade: grade,
-      locality: locality,
-      created_at: firebase.firestore.FieldValue.serverTimestamp()
-    });
-  } catch (err) {
-    console.error("Firebase insert error:", err);
-  }
+      // 1. Insert into Firebase Cloud DB
+      try {
+        await db.collection("admissions").add({
+          parent_name: parentName,
+          phone: phone,
+          child_name: childName,
+          grade: grade,
+          locality: locality,
+          created_at: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      } catch (err) {
+        console.error("Firebase write error:", err);
+      }
 
-  // 2. Email Dispatch via FormSubmit in background
-  try {
-    fetch("https://formsubmit.co/ajax/chellurichandu13@gmail.com", {
-      method: "POST",
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({
-        _subject: `New Admission Inquiry - ${childName} (${grade})`,
-        Parent_Name: parentName,
-        Contact_Number: phone,
-        Student_Name: childName,
-        Grade_Applying: grade,
-        Locality_and_Bus: locality,
-        School: "Wonder Kids High School Khammam"
-      })
-    });
-  } catch (err) {}
+      // 2. Background Email Dispatch
+      try {
+        fetch("https://formsubmit.co/ajax/chellurichandu13@gmail.com", {
+          method: "POST",
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({
+            _subject: `New Admission Inquiry - ${childName} (${grade})`,
+            Parent_Name: parentName,
+            Contact_Number: phone,
+            Student_Name: childName,
+            Grade_Applying: grade,
+            Locality_and_Bus: locality,
+            School: "Wonder Kids High School Khammam"
+          })
+        });
+      } catch (err) {}
 
-  // 3. Instant WhatsApp forward (No popup blocker)
-  const myWhatsApp = "918897798251";
-  const message = `*New Admission Application - Wonder Kids*%0A%0A` +
-                  `*Parent Name:* ${encodeURIComponent(parentName)}%0A` +
-                  `*Phone:* ${encodeURIComponent(phone)}%0A` +
-                  `*Child Name:* ${encodeURIComponent(childName)}%0A` +
-                  `*Grade:* ${encodeURIComponent(grade)}%0A` +
-                  `*Locality:* ${encodeURIComponent(locality)}%0A%0A` +
-                  `_Saved to 24/7 Firebase Cloud DB & Dispatched to Email_`;
+      // 3. WhatsApp Redirect
+      const myWhatsApp = "918897798251";
+      const message = `*New Admission Application - Wonder Kids*%0A%0A` +
+                      `*Parent Name:* ${encodeURIComponent(parentName)}%0A` +
+                      `*Phone:* ${encodeURIComponent(phone)}%0A` +
+                      `*Child Name:* ${encodeURIComponent(childName)}%0A` +
+                      `*Grade:* ${encodeURIComponent(grade)}%0A` +
+                      `*Locality:* ${encodeURIComponent(locality)}%0A%0A` +
+                      `_Saved to 24/7 Firebase Cloud DB & Dispatched to Email_`;
 
-  window.location.href = `https://wa.me/${myWhatsApp}?text=${message}`;
-  return false;
-}
-    const SUPABASE_ANON_KEY = "sb_publishable_-jDZRF9Pq9QHP0bIABHv6w_J6DmtqVk";
-    let supabaseClient = null;
+      setTimeout(() => {
+        window.location.href = `https://wa.me/${myWhatsApp}?text=${message}`;
+      }, 350);
 
-    if (window.supabase) {
-      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      return false;
     }
 
+    // Modal & Slider Controls
     function closeAdmissionPopup() {
       const popup = document.getElementById('admissionPopup');
       if (popup) popup.classList.add('hidden');
@@ -1042,7 +1039,6 @@ async function handleFormSubmit(e) {
       }
     }
 
-    // Modal Handlers
     function openCampusTourModal(title, location, desc, imgUrl) {
       document.getElementById('modalCampusHeading').innerText = title;
       document.getElementById('modalCampusTitle').innerText = title;
@@ -1090,75 +1086,7 @@ async function handleFormSubmit(e) {
       document.getElementById('fullGalleryModal').classList.add('hidden');
     }
 
-    // ===============================================
-    // ADMISSION SUBMISSION: SUPABASE + EMAIL + WHATSAPP
-    // ===============================================
-    async function handleFormSubmit(e) {
-      if (e) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-
-      const btn = document.getElementById('submitBtnLabel');
-      if (btn) {
-        btn.innerText = "Submitting Inquiry...";
-        btn.disabled = true;
-      }
-
-      const parentName = (document.getElementById('inputParent')?.value || '').trim();
-      const phone = (document.getElementById('inputPhone')?.value || '').trim();
-      const childName = (document.getElementById('inputChild')?.value || '').trim() || 'N/A';
-      const grade = document.getElementById('inputGrade')?.value || 'Nursery';
-      const locality = (document.getElementById('inputLocality')?.value || '').trim() || 'Khammam';
-
-      // 1. Insert into Supabase Live Database
-      if (supabaseClient) {
-        try {
-          await supabaseClient.from('admissions').insert([
-            {
-              parent_name: parentName,
-              phone: phone,
-              child_name: childName,
-              grade: grade,
-              locality: locality
-            }
-          ]);
-        } catch (err) {
-          console.error("Supabase insert error:", err);
-        }
-      }
-
-      // 2. Email Dispatch via FormSubmit in background
-      try {
-        fetch("https://formsubmit.co/ajax/chellurichandu13@gmail.com", {
-          method: "POST",
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify({
-            _subject: `New Admission Inquiry - ${childName} (${grade})`,
-            Parent_Name: parentName,
-            Contact_Number: phone,
-            Student_Name: childName,
-            Grade_Applying: grade,
-            Locality_and_Bus: locality,
-            School: "Wonder Kids High School Khammam"
-          })
-        });
-      } catch (err) {}
-
-      // 3. Instant WhatsApp forward (Bypasses popup blocker)
-      const myWhatsApp = "918897798251";
-      const message = `*New Admission Application - Wonder Kids*%0A%0A` +
-                      `*Parent Name:* ${encodeURIComponent(parentName)}%0A` +
-                      `*Phone:* ${encodeURIComponent(phone)}%0A` +
-                      `*Child Name:* ${encodeURIComponent(childName)}%0A` +
-                      `*Grade:* ${encodeURIComponent(grade)}%0A` +
-                      `*Locality:* ${encodeURIComponent(locality)}%0A%0A` +
-                      `_Saved to Cloud DB & Dispatched to Email_`;
-
-      window.location.href = `https://wa.me/${myWhatsApp}?text=${message}`;
-      return false;
-    }
-
+    // Language Translations
     const translations = {
       en: {
         nav_vision: "Vision",
@@ -1206,6 +1134,7 @@ async function handleFormSubmit(e) {
       }
     }
 
+    // AI Helpdesk Chat Logic
     function toggleChat() {
       const modal = document.getElementById('chatModal');
       modal.classList.toggle('hidden');
