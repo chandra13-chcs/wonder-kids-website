@@ -10,7 +10,9 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <!-- Supabase JS Client -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Firebase App & Firestore SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
   <style>
     body { font-family: 'Plus Jakarta Sans', sans-serif; }
     .font-brand { font-family: 'Cinzel Decorative', serif; }
@@ -207,7 +209,61 @@
 
   <script>
     // Supabase Live Client
-    const SUPABASE_URL = "https://xoqpbydredpdslccmlyq.supabase.co";
+   // Firebase Configuration & Init
+const firebaseConfig = {
+  apiKey: "AIzaSyAmcWWCnbruwSv_QFk2I60TyxYefqH4hHc",
+  authDomain: "wonder-kids-school.firebaseapp.com",
+  projectId: "wonder-kids-school",
+  storageBucket: "wonder-kids-school.firebasestorage.app",
+  messagingSenderId: "145902244646",
+  appId: "1:145902244646:web:082492321059b3a079a7e7"
+};
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+const db = firebase.firestore();
+
+async function loadAdmissionLeads() {
+  const tbody = document.getElementById('leadsTableBody');
+  tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-xs text-[#8C5D38]">Loading cloud leads from Firebase...</td></tr>`;
+
+  try {
+    const snapshot = await db.collection("admissions").orderBy("created_at", "desc").get();
+
+    if (snapshot.empty) {
+      tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-xs text-[#8C5D38]">No admission inquiries found in Firebase cloud.</td></tr>`;
+      document.getElementById('leadCount').innerText = `0 Admission inquiries received`;
+      return;
+    }
+
+    document.getElementById('leadCount').innerText = `${snapshot.size} Admission inquiries in cloud`;
+    tbody.innerHTML = '';
+
+    snapshot.forEach((doc) => {
+      const l = doc.data();
+      const tr = document.createElement('tr');
+      tr.className = "hover:bg-[#FAF7F2] transition";
+      tr.innerHTML = `
+        <td class="py-3 px-3 font-bold text-[#26170E]">${l.parent_name || 'N/A'}</td>
+        <td class="py-3 px-3"><a href="tel:${l.phone}" class="text-emerald-700 font-bold hover:underline">${l.phone || ''}</a></td>
+        <td class="py-3 px-3">${l.child_name || 'N/A'}</td>
+        <td class="py-3 px-3 font-semibold text-[#663F24]">${l.grade || ''}</td>
+        <td class="py-3 px-3 text-[#7A6453]">${l.locality || 'Khammam'}</td>
+        <td class="py-3 px-3 text-right">
+          <a href="https://wa.me/91${(l.phone || '').replace(/[^0-9]/g, '')}" target="_blank" class="px-2.5 py-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 text-[10px] font-bold rounded-lg transition">
+            WhatsApp
+          </a>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+    lucide.createIcons();
+  } catch (err) {
+    console.error("Firestore read error:", err);
+    tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-xs text-rose-700">Error connecting to Firebase Firestore.</td></tr>`;
+  }
+}
     const SUPABASE_ANON_KEY = "sb_publishable_-jDZRF9Pq9QHP0bIABHv6w_J6DmtqVk";
     let supabaseClient = null;
 
