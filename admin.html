@@ -6,19 +6,9 @@
   <title>Wonder Kids Portal | School Management Console</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Firebase App & Firestore SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-  <style>
-    body { font-family: 'Plus Jakarta Sans', sans-serif; }
-    .font-brand { font-family: 'Michroma', sans-serif; }
-    .font-heading { font-family: 'Playfair Display', serif; }
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-  </style>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="bg-[#FAF7F2] text-[#3D2C20] min-h-screen antialiased selection:bg-[#8C5D38] selection:text-white">
 
@@ -77,7 +67,7 @@
           </div>
         </div>
 
-        <!-- Navigation Bar Tabs (Full 5 Tabs) -->
+        <!-- Navigation Bar Tabs -->
         <div class="flex items-center gap-1.5 bg-[#442B1A] p-1 rounded-2xl border border-[#5C3820] overflow-x-auto no-scrollbar">
           <button id="tabGallery" onclick="switchTab('gallery')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#663F24] text-white flex items-center gap-1.5 transition shadow-sm">
             <i data-lucide="image" class="w-4 h-4"></i> Gallery
@@ -239,7 +229,7 @@
         </div>
       </section>
 
-      <!-- TAB 4: ADMISSIONS (WITH WHATSAPP + DIRECT MAIL ACCEPT) -->
+      <!-- TAB 4: ADMISSIONS -->
       <section id="secLeads" class="hidden space-y-6">
         <div class="bg-[#F5EFEB] rounded-3xl border border-[#DFCDB7] p-6 sm:p-8 shadow-sm">
           <div class="flex items-center justify-between pb-4 border-b border-[#DFCDB7] mb-4">
@@ -293,268 +283,12 @@
     </main>
   </div>
 
-  <script>
-    // Firebase Configuration & Init
-    const firebaseConfig = {
-      apiKey: "AIzaSyAmcWWCnbruwSv_QFk2I60TyxYefqH4hHc",
-      authDomain: "wonder-kids-school.firebaseapp.com",
-      projectId: "wonder-kids-school",
-      storageBucket: "wonder-kids-school.firebasestorage.app",
-      messagingSenderId: "145902244646",
-      appId: "1:145902244646:web:082492321059b3a079a7e7"
-    };
-
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-    }
-    const db = firebase.firestore();
-    db.settings({
-  experimentalForceLongPolling: true
-});
-
-    let uploadedBase64Image = null;
-
-    function handleFileSelection(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      document.getElementById('fileChosenLabel').innerText = file.name;
-
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        uploadedBase64Image = evt.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function getAdminAuth() {
-      const savedAuth = localStorage.getItem('wonderkids_auth_creds');
-      if (savedAuth) return JSON.parse(savedAuth);
-      return { user: "admin", pass: "wonderkids@2026" };
-    }
-
-    function checkExistingSession() {
-      const isAuth = sessionStorage.getItem('wonderkids_admin_logged_in');
-      if (isAuth === 'true') {
-        document.getElementById('loginOverlay').classList.add('hidden');
-        document.getElementById('dashboardApp').classList.remove('hidden');
-        loadPublishedPhotos();
-        lucide.createIcons();
-      }
-    }
-
-    function handleAdminLogin(e) {
-      e.preventDefault();
-      const user = document.getElementById('loginUsername').value.trim();
-      const pass = document.getElementById('loginPassword').value.trim();
-      const auth = getAdminAuth();
-
-      if (user === auth.user && pass === auth.pass) {
-        sessionStorage.setItem('wonderkids_admin_logged_in', 'true');
-        document.getElementById('loginOverlay').classList.add('hidden');
-        document.getElementById('dashboardApp').classList.remove('hidden');
-        loadPublishedPhotos();
-        lucide.createIcons();
-      } else {
-        document.getElementById('loginError').classList.remove('hidden');
-      }
-    }
-
-    function handleAdminLogout() {
-      if (confirm("Log out of Wonder Kids Console?")) {
-        sessionStorage.removeItem('wonderkids_admin_logged_in');
-        window.location.reload();
-      }
-    }
-
-    function handleChangeCredentials(e) {
-      e.preventDefault();
-      const user = document.getElementById('newAdminUser').value.trim();
-      const pass = document.getElementById('newAdminPass').value.trim();
-      localStorage.setItem('wonderkids_auth_creds', JSON.stringify({ user, pass }));
-      alert("Admin credentials updated successfully!");
-    }
-
-    function switchTab(tabId) {
-      ['gallery', 'achievements', 'notices', 'leads', 'settings'].forEach(t => {
-        document.getElementById(`sec${t.charAt(0).toUpperCase() + t.slice(1)}`).classList.add('hidden');
-        document.getElementById(`tab${t.charAt(0).toUpperCase() + t.slice(1)}`).className = "px-3.5 py-1.5 rounded-xl text-xs font-bold text-[#E8DCCB] hover:text-white flex items-center gap-1.5 transition";
-      });
-
-      document.getElementById(`sec${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`).classList.remove('hidden');
-      document.getElementById(`tab${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`).className = "px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#663F24] text-white flex items-center gap-1.5 transition shadow-sm";
-
-      if (tabId === 'leads') loadAdmissionLeads();
-      if (tabId === 'gallery') loadPublishedPhotos();
-      lucide.createIcons();
-    }
-
-    // GALLERY LOGIC
-    async function handleGalleryPublish(e) {
-      e.preventDefault();
-      const title = document.getElementById('photoTitle').value.trim();
-      const category = document.getElementById('photoCategory').value;
-      const urlInput = document.getElementById('photoUrl').value.trim();
-      const imageUrl = uploadedBase64Image || urlInput;
-
-      if (!imageUrl) {
-        alert("Please choose an image file or provide an Image URL!");
-        return;
-      }
-
-      const btn = document.getElementById('gallerySubmitBtn');
-      btn.innerText = "Publishing to Cloud...";
-      btn.disabled = true;
-
-      try {
-        await db.collection("gallery").add({
-          title,
-          category,
-          image_url: imageUrl,
-          created_at: firebase.firestore.FieldValue.serverTimestamp()
-        });
-        alert("Photo successfully published to Live Gallery!");
-        e.target.reset();
-        uploadedBase64Image = null;
-        document.getElementById('fileChosenLabel').innerText = "No file chosen";
-        loadPublishedPhotos();
-      } catch (err) {
-        alert("Publish error: " + err.message);
-      } finally {
-        btn.innerText = "Publish to Live Gallery";
-        btn.disabled = false;
-        lucide.createIcons();
-      }
-    }
-
-    async function loadPublishedPhotos() {
-      const container = document.getElementById('galleryContainer');
-      const countLabel = document.getElementById('photosCount');
-
-      try {
-        const snapshot = await db.collection("gallery").get();
-        if (snapshot.empty) {
-          container.innerHTML = "No custom photos added yet. Upload using the form above!";
-          countLabel.innerText = "0 custom photos uploaded";
-          return;
-        }
-
-        countLabel.innerText = `${snapshot.size} custom photos uploaded`;
-        container.innerHTML = `<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-left"></div>`;
-        const grid = container.querySelector('div');
-
-        snapshot.forEach(doc => {
-          const p = doc.data();
-          const item = document.createElement('div');
-          item.className = "bg-white p-2.5 rounded-2xl border border-[#DFCDB7] shadow-sm";
-          item.innerHTML = `
-            <div class="h-32 rounded-xl overflow-hidden bg-[#FAF7F2] border border-[#EBE0D3]">
-              <img src="${p.image_url}" class="w-full h-full object-cover">
-            </div>
-            <p class="text-[10px] font-bold text-[#8C5D38] uppercase mt-2">${p.category || 'Special Moments'}</p>
-            <p class="text-xs font-bold text-[#26170E] line-clamp-1">${p.title}</p>
-          `;
-          grid.appendChild(item);
-        });
-      } catch (err) {
-        container.innerHTML = `<span class="text-rose-600">Error loading photos: ${err.message}</span>`;
-      }
-    }
-
-    // ACHIEVEMENTS & NOTICES
-    async function handleAchievementPublish(e) {
-      e.preventDefault();
-      try {
-        await db.collection("achievements").add({
-          student_name: document.getElementById('achName').value.trim(),
-          category: document.getElementById('achCategory').value.trim(),
-          title: document.getElementById('achTitle').value.trim(),
-          image_url: document.getElementById('achUrl').value.trim() || 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=600&q=80',
-          description: document.getElementById('achDesc').value.trim(),
-          created_at: firebase.firestore.FieldValue.serverTimestamp()
-        });
-        alert("Achievement published to school site!");
-        e.target.reset();
-      } catch (err) {
-        alert("Error: " + err.message);
-      }
-    }
-
-    async function handleNoticePublish(e) {
-      e.preventDefault();
-      try {
-        await db.collection("notices").add({
-          tag: document.getElementById('noticeTag').value.trim(),
-          dept: document.getElementById('noticeDept').value.trim(),
-          title: document.getElementById('noticeTitle').value.trim(),
-          description: document.getElementById('noticeDesc').value.trim(),
-          created_at: firebase.firestore.FieldValue.serverTimestamp()
-        });
-        alert("Notice published successfully!");
-        e.target.reset();
-      } catch (err) {
-        alert("Error: " + err.message);
-      }
-    }
-
-    // ADMISSION LEADS (WITH DUAL WHATSAPP + DIRECT MAIL ACCEPT)
-    async function loadAdmissionLeads() {
-      const tbody = document.getElementById('leadsTableBody');
-      tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-xs text-[#8C5D38]">Loading cloud leads from Firebase...</td></tr>`;
-
-      try {
-        const snapshot = await db.collection("admissions").get();
-        if (snapshot.empty) {
-          tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-xs text-[#8C5D38]">No admission inquiries found in Firebase cloud.</td></tr>`;
-          document.getElementById('leadCount').innerText = `0 Admission inquiries received`;
-          return;
-        }
-
-        document.getElementById('leadCount').innerText = `${snapshot.size} Admission inquiries in cloud`;
-        tbody.innerHTML = '';
-
-        const docs = [];
-        snapshot.forEach(doc => docs.push(doc.data()));
-        docs.reverse();
-
-        docs.forEach((l) => {
-          const tr = document.createElement('tr');
-          tr.className = "hover:bg-[#FAF7F2] transition";
-          
-          const mailSubject = encodeURIComponent(`Admission Application Accepted - Wonder Kids High School, Khammam`);
-          const mailBody = encodeURIComponent(`Dear ${l.parent_name || 'Parent'},\n\nGreetings from Wonder Kids High School, Khammam.\n\nWe are pleased to inform you that your child ${l.child_name || 'the student'}'s admission application for ${l.grade || 'the requested grade'} has been reviewed and accepted.\n\nPlease visit our campus along with original certificates to complete the enrolment formalities.\n\nWarm Regards,\nAdmissions Committee\nWonder Kids High School, Khammam\nContact: +91 88977 98251`);
-
-          tr.innerHTML = `
-            <td class="py-3 px-3">
-              <span class="font-bold text-[#26170E] block">${l.parent_name || 'N/A'}</span>
-              <span class="text-[10px] text-[#7A6453]">${l.email || 'No Email Provided'}</span>
-            </td>
-            <td class="py-3 px-3">
-              <a href="tel:${l.phone}" class="text-emerald-700 font-bold hover:underline">${l.phone || ''}</a>
-            </td>
-            <td class="py-3 px-3">${l.child_name || 'N/A'}</td>
-            <td class="py-3 px-3 font-semibold text-[#663F24]">${l.grade || ''}</td>
-            <td class="py-3 px-3 text-[#7A6453]">${l.locality || 'Khammam'}</td>
-            <td class="py-3 px-3 text-right">
-              <div class="flex flex-col sm:flex-row gap-1.5 justify-end">
-                <a href="https://wa.me/91${(l.phone || '').replace(/[^0-9]/g, '')}" target="_blank" class="px-2.5 py-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 text-[10px] font-bold rounded-lg transition text-center whitespace-nowrap">
-                  WhatsApp
-                </a>
-                <a href="mailto:${l.email || ''}?subject=${mailSubject}&body=${mailBody}" class="px-2.5 py-1 bg-blue-100 hover:bg-blue-200 text-blue-800 text-[10px] font-bold rounded-lg transition text-center whitespace-nowrap ${!l.email ? 'opacity-40 pointer-events-none' : ''}">
-                  Mail Accept
-                </a>
-              </div>
-            </td>
-          `;
-          tbody.appendChild(tr);
-        });
-        lucide.createIcons();
-      } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-xs text-rose-700">Firestore error: ${err.message}</td></tr>`;
-      }
-    }
-
-    checkExistingSession();
-    lucide.createIcons();
-  </script>
+  <!-- Firebase Core SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  
+  <!-- Modular Scripts -->
+  <script src="js/firebase-config.js"></script>
+  <script src="js/admin.js"></script>
 </body>
 </html>
