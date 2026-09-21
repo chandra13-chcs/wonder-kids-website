@@ -1,251 +1,468 @@
-let uploadedBase64Image = null;
-
 document.addEventListener('DOMContentLoaded', () => {
-  checkExistingSession();
   if (window.lucide) lucide.createIcons();
+
+  initRevealAnimations();
+  initUiSound();
+  bindSoundForImportantActions();
 });
 
-function handleFileSelection(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  document.getElementById('fileChosenLabel').innerText = file.name;
+const UI_SOUND = {
+  enabled: true,
+  volume: 0.04,
+  audioContext: null
+};
 
-  const reader = new FileReader();
-  reader.onload = function(evt) {
-    uploadedBase64Image = evt.target.result;
-  };
-  reader.readAsDataURL(file);
+function ensureAudioContext() {
+  if (!('AudioContext' in window || 'webkitAudioContext' in window)) return null;
+
+  const AudioCtor = window.AudioContext || window.webkitAudioContext;
+  if (!UI_SOUND.audioContext) {
+    UI_SOUND.audioContext = new AudioCtor();
+  }
+
+  if (UI_SOUND.audioContext.state === 'suspended') {
+    UI_SOUND.audioContext.resume();
+  }
+
+  return UI_SOUND.audioContext;
 }
 
-function getAdminAuth() {
-  const savedAuth = localStorage.getItem('wonderkids_auth_creds');
-  if (savedAuth) return JSON.parse(savedAuth);
-  return { user: "admin", pass: "wonderkids@2026" };
+function initUiSound() {
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduced) UI_SOUND.enabled = false;
 }
 
-function checkExistingSession() {
-  const isAuth = sessionStorage.getItem('wonderkids_admin_logged_in');
-  if (isAuth === 'true') {
-    document.getElementById('loginOverlay')?.classList.add('hidden');
-    document.getElementById('dashboardApp')?.classList.remove('hidden');
-    loadPublishedPhotos();
-    lucide.createIcons();
+function playUiClickSound() {
+  if (!UI_SOUND.enabled) return;
+
+  const context = ensureAudioContext();
+  if (!context) return;
+
+  try {
+    const oscillator = context.createOscillator();
+    const gainNode = context.createGain();
+
+    oscillator.type = 'triangle';
+    oscillator.frequency.value = 560;
+    gainNode.gain.value = UI_SOUND.volume;
+
+    oscillator.connect(gainNode);
+    gainNode.connect(context.destination);
+
+    oscillator.start();
+    oscillator.stop(context.currentTime + 0.06);
+    gainNode.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + 0.08);
+  } catch (error) {
+    // silent fail
   }
 }
 
-function handleAdminLogin(e) {
-  e.preventDefault();
-  const user = document.getElementById('loginUsername').value.trim();
-  const pass = document.getElementById('loginPassword').value.trim();
-  const auth = getAdminAuth();
+function playSuccessSound() {
+  if (!UI_SOUND.enabled) return;
 
-  if (user === auth.user && pass === auth.pass) {
-    sessionStorage.setItem('wonderkids_admin_logged_in', 'true');
-    document.getElementById('loginOverlay')?.classList.add('hidden');
-    document.getElementById('dashboardApp')?.classList.remove('hidden');
-    loadPublishedPhotos();
-    lucide.createIcons();
-  } else {
-    document.getElementById('loginError')?.classList.remove('hidden');
+  const context = ensureAudioContext();
+  if (!context) return;
+
+  try {
+    const gainNode = context.createGain();
+    const toneA = context.createOscillator();
+    const toneB = context.createOscillator();
+
+    toneA.type = 'sine';
+    toneA.frequency.value = 740;
+    toneB.type = 'triangle';
+    toneB.frequency.value = 980;
+
+    gainNode.gain.value = UI_SOUND.volume * 1.3;
+
+    toneA.connect(gainNode);
+    toneB.connect(gainNode);
+    gainNode.connect(context.destination);
+
+    toneA.start();
+    toneB.start(context.currentTime + 0.08);
+    toneA.stop(context.currentTime + 0.12);
+    toneB.stop(context.currentTime + 0.2);
+  } catch (error) {
+    // silent fail
   }
 }
 
-function handleAdminLogout() {
-  if (confirm("Log out of Wonder Kids Console?")) {
-    sessionStorage.removeItem('wonderkids_admin_logged_in');
-    window.location.reload();
-  }
-}
+function bindSoundForImportantActions() {
+  document.body.addEventListener('click', function (event) {
+    const trigger = event.target.closest('[data-ui-sound="true"], a[href^="#"], #submitBtnLabel, #chatButton');
+    if (!trigger) return;
 
-function handleChangeCredentials(e) {
-  e.preventDefault();
-  const user = document.getElementById('newAdminUser').value.trim();
-  const pass = document.getElementById('newAdminPass').value.trim();
-  localStorage.setItem('wonderkids_auth_creds', JSON.stringify({ user, pass }));
-  alert("Admin credentials updated successfully!");
-}
+    if (trigger.closest('.modal-close, .close-button, button[onclick*="close"]')) return;
 
-function switchTab(tabId) {
-  ['gallery', 'achievements', 'notices', 'leads', 'settings'].forEach(t => {
-    document.getElementById(`sec${t.charAt(0).toUpperCase() + t.slice(1)}`)?.classList.add('hidden');
-    const tab = document.getElementById(`tab${t.charAt(0).toUpperCase() + t.slice(1)}`);
-    if (tab) tab.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold text-[#E8DCCB] hover:text-white flex items-center gap-1.5 transition";
+    playUiClickSound();
   });
-
-  document.getElementById(`sec${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`)?.classList.remove('hidden');
-  const activeTab = document.getElementById(`tab${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`);
-  if (activeTab) activeTab.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#663F24] text-white flex items-center gap-1.5 transition shadow-sm";
-
-  if (tabId === 'leads') loadAdmissionLeads();
-  if (tabId === 'gallery') loadPublishedPhotos();
-  lucide.createIcons();
 }
 
-// GALLERY LOGIC
-async function handleGalleryPublish(e) {
-  e.preventDefault();
-  const title = document.getElementById('photoTitle').value.trim();
-  const category = document.getElementById('photoCategory').value;
-  const urlInput = document.getElementById('photoUrl').value.trim();
-  const imageUrl = uploadedBase64Image || urlInput;
+function triggerFormError() {
+  const form = document.getElementById('admissionForm');
+  if (!form) return;
+  form.classList.remove('form-invalid');
+  void form.offsetWidth;
+  form.classList.add('form-invalid');
 
-  if (!imageUrl) {
-    alert("Please choose an image file or provide an Image URL!");
+  const error = document.getElementById('formErrorBanner');
+  if (error) {
+    error.classList.remove('hidden');
+    error.textContent = 'Please complete the required fields before submitting.';
+  }
+
+  setTimeout(() => form.classList.remove('form-invalid'), 360);
+}
+
+function showSuccessModal(ref) {
+  const modal = document.getElementById('submissionSuccessModal');
+  const refBox = document.getElementById('successRefNumber');
+  if (!modal || !refBox) return;
+
+  refBox.textContent = ref;
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+
+  const confetti = modal.querySelector('.success-confetti');
+  if (confetti) {
+    confetti.innerHTML = '';
+    for (let i = 0; i < 12; i += 1) {
+      const dot = document.createElement('span');
+      dot.style.left = `${50 + (Math.random() * 30 - 15)}%`;
+      dot.style.top = `${50 + (Math.random() * 18 - 9)}%`;
+      dot.style.background = ['#D9822B', '#A05C26', '#C79A68', '#E6A052'][i % 4];
+      dot.style.setProperty('--tx', `${(Math.random() * 120 - 60).toFixed(2)}px`);
+      dot.style.setProperty('--ty', `${(Math.random() * 120 - 60).toFixed(2)}px`);
+      confetti.appendChild(dot);
+    }
+  }
+}
+
+function closeSuccessModal() {
+  const modal = document.getElementById('submissionSuccessModal');
+  if (!modal) return;
+  modal.classList.add('hidden');
+  modal.classList.remove('flex');
+}
+
+function initRevealAnimations() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll('.section-reveal, .reveal-principal').forEach((el) => {
+      el.classList.add('is-visible');
+    });
     return;
   }
 
-  const btn = document.getElementById('gallerySubmitBtn');
-  btn.innerText = "Publishing to Cloud...";
-  btn.disabled = true;
-
-  try {
-    await db.collection("gallery").add({
-      title,
-      category,
-      image_url: imageUrl,
-      created_at: firebase.firestore.FieldValue.serverTimestamp()
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
     });
-    alert("Photo successfully published to Live Gallery!");
-    e.target.reset();
-    uploadedBase64Image = null;
-    document.getElementById('fileChosenLabel').innerText = "No file chosen";
-    loadPublishedPhotos();
-  } catch (err) {
-    alert("Publish error: " + err.message);
-  } finally {
-    btn.innerText = "Publish to Live Gallery";
-    btn.disabled = false;
-    lucide.createIcons();
-  }
+  }, { threshold: 0.16 });
+
+  document.querySelectorAll('.section-reveal, .reveal-principal').forEach((el) => observer.observe(el));
 }
 
-async function loadPublishedPhotos() {
-  const container = document.getElementById('galleryContainer');
-  const countLabel = document.getElementById('photosCount');
-  if (!container) return;
+async function handleFormSubmit(e) {
+  if (e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  const form = document.getElementById('admissionForm');
+  const btn = document.getElementById('submitBtnLabel');
+
+  if (form && !form.checkValidity()) {
+    triggerFormError();
+    form.reportValidity();
+    return false;
+  }
+
+  if (btn) {
+    btn.innerHTML = '<span>Submitting...</span>';
+    btn.disabled = true;
+    btn.classList.add('opacity-80', 'cursor-not-allowed');
+  }
+
+  const parentName = (document.getElementById('inputParent')?.value || '').trim();
+  const phone = (document.getElementById('inputPhone')?.value || '').trim();
+  const email = (document.getElementById('inputEmail')?.value || '').trim();
+  const childName = (document.getElementById('inputChild')?.value || '').trim() || 'N/A';
+  const grade = document.getElementById('inputGrade')?.value || 'Nursery';
+  const locality = (document.getElementById('inputLocality')?.value || '').trim() || 'Khammam';
 
   try {
-    const snapshot = await db.collection("gallery").get();
-    if (snapshot.empty) {
-      container.innerHTML = "No custom photos added yet. Upload using the form above!";
-      if (countLabel) countLabel.innerText = "0 custom photos uploaded";
-      return;
+    await db.collection('admissions').add({
+      parent_name: parentName,
+      phone: phone,
+      email: email,
+      child_name: childName,
+      grade: grade,
+      locality: locality,
+      created_at: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    const ref = `WK-${Date.now().toString().slice(-6)}`;
+    playSuccessSound();
+    showSuccessModal(ref);
+
+    if (form) form.reset();
+
+    if (btn) {
+      btn.innerHTML = '<span>Application Submitted</span>';
+      btn.disabled = false;
+      btn.classList.remove('opacity-80', 'cursor-not-allowed');
     }
 
-    if (countLabel) countLabel.innerText = `${snapshot.size} custom photos uploaded`;
-    container.innerHTML = `<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-left"></div>`;
-    const grid = container.querySelector('div');
-
-    snapshot.forEach(doc => {
-      const p = doc.data();
-      const item = document.createElement('div');
-      item.className = "bg-white p-2.5 rounded-2xl border border-[#DFCDB7] shadow-sm";
-      item.innerHTML = `
-        <div class="h-32 rounded-xl overflow-hidden bg-[#FAF7F2] border border-[#EBE0D3]">
-          <img src="${p.image_url}" class="w-full h-full object-cover">
-        </div>
-        <p class="text-[10px] font-bold text-[#8C5D38] uppercase mt-2">${p.category || 'Special Moments'}</p>
-        <p class="text-xs font-bold text-[#26170E] line-clamp-1">${p.title}</p>
-      `;
-      grid.appendChild(item);
-    });
-  } catch (err) {
-    container.innerHTML = `<span class="text-rose-600">Error loading photos: ${err.message}</span>`;
-  }
-}
-
-// ACHIEVEMENTS & NOTICES
-async function handleAchievementPublish(e) {
-  e.preventDefault();
-  try {
-    await db.collection("achievements").add({
-      student_name: document.getElementById('achName').value.trim(),
-      category: document.getElementById('achCategory').value.trim(),
-      title: document.getElementById('achTitle').value.trim(),
-      image_url: document.getElementById('achUrl').value.trim() || 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=600&q=80',
-      description: document.getElementById('achDesc').value.trim(),
-      created_at: firebase.firestore.FieldValue.serverTimestamp()
-    });
-    alert("Achievement published to school site!");
-    e.target.reset();
-  } catch (err) {
-    alert("Error: " + err.message);
-  }
-}
-
-async function handleNoticePublish(e) {
-  e.preventDefault();
-  try {
-    await db.collection("notices").add({
-      tag: document.getElementById('noticeTag').value.trim(),
-      dept: document.getElementById('noticeDept').value.trim(),
-      title: document.getElementById('noticeTitle').value.trim(),
-      description: document.getElementById('noticeDesc').value.trim(),
-      created_at: firebase.firestore.FieldValue.serverTimestamp()
-    });
-    alert("Notice published successfully!");
-    e.target.reset();
-  } catch (err) {
-    alert("Error: " + err.message);
-  }
-}
-
-// ADMISSION LEADS (WITH WHATSAPP + MAIL ACCEPT)
-async function loadAdmissionLeads() {
-  const tbody = document.getElementById('leadsTableBody');
-  if (!tbody) return;
-  tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-xs text-[#8C5D38]">Loading cloud leads from Firebase...</td></tr>`;
-
-  try {
-    const snapshot = await db.collection("admissions").get();
-    if (snapshot.empty) {
-      tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-xs text-[#8C5D38]">No admission inquiries found in Firebase cloud.</td></tr>`;
-      const leadCount = document.getElementById('leadCount');
-      if (leadCount) leadCount.innerText = `0 Admission inquiries received`;
-      return;
+    try {
+      fetch('https://formsubmit.co/ajax/chellurichandu13@gmail.com', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _subject: `New Admission Inquiry - ${childName} (${grade})`,
+          _replyto: email,
+          Parent_Name: parentName,
+          Contact_Number: phone,
+          Parent_Email: email,
+          Student_Name: childName,
+          Grade_Applying: grade,
+          Locality_and_Bus: locality,
+          School: 'Wonder Kids High School Khammam'
+        })
+      });
+    } catch (err) {
+      // silent fail
     }
 
-    const leadCount = document.getElementById('leadCount');
-    if (leadCount) leadCount.innerText = `${snapshot.size} Admission inquiries in cloud`;
-    tbody.innerHTML = '';
+    setTimeout(() => {
+      const waUrl = `https://wa.me/918897798251?text=${encodeURIComponent(
+        `*New Admission Application - Wonder Kids*%0A%0A` +
+        `*Parent Name:* ${parentName}%0A` +
+        `*Phone:* ${phone}%0A` +
+        `*Email:* ${email}%0A` +
+        `*Child Name:* ${childName}%0A` +
+        `*Grade:* ${grade}%0A` +
+        `*Locality:* ${locality}%0A%0A` +
+        `_Saved to 24/7 Firebase Cloud DB & Dispatched to Email_`
+      )}`;
 
-    const docs = [];
-    snapshot.forEach(doc => docs.push(doc.data()));
-    docs.reverse();
+      const newWindow = window.open(waUrl, '_blank');
+      if (!newWindow) window.location.href = waUrl;
+    }, 1200);
 
-    docs.forEach((l) => {
-      const tr = document.createElement('tr');
-      tr.className = "hover:bg-[#FAF7F2] transition";
-      
-      const mailSubject = encodeURIComponent(`Admission Application Accepted - Wonder Kids High School, Khammam`);
-      const mailBody = encodeURIComponent(`Dear ${l.parent_name || 'Parent'},\n\nGreetings from Wonder Kids High School, Khammam.\n\nWe are pleased to inform you that your child ${l.child_name || 'the student'}'s admission application for ${l.grade || 'the requested grade'} has been reviewed and accepted.\n\nPlease visit our campus along with original certificates to complete the enrolment formalities.\n\nWarm Regards,\nAdmissions Committee\nWonder Kids High School, Khammam\nContact: +91 88977 98251`);
+    return false;
+  } catch (error) {
+    console.error('Admission submission failed:', error);
 
-      tr.innerHTML = `
-        <td class="py-3 px-3">
-          <span class="font-bold text-[#26170E] block">${l.parent_name || 'N/A'}</span>
-          <span class="text-[10px] text-[#7A6453]">${l.email || 'No Email Provided'}</span>
-        </td>
-        <td class="py-3 px-3">
-          <a href="tel:${l.phone}" class="text-emerald-700 font-bold hover:underline">${l.phone || ''}</a>
-        </td>
-        <td class="py-3 px-3">${l.child_name || 'N/A'}</td>
-        <td class="py-3 px-3 font-semibold text-[#663F24]">${l.grade || ''}</td>
-        <td class="py-3 px-3 text-[#7A6453]">${l.locality || 'Khammam'}</td>
-        <td class="py-3 px-3 text-right">
-          <div class="flex flex-col sm:flex-row gap-1.5 justify-end">
-            <a href="https://wa.me/91${(l.phone || '').replace(/[^0-9]/g, '')}" target="_blank" class="px-2.5 py-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 text-[10px] font-bold rounded-lg transition text-center whitespace-nowrap">
-              WhatsApp
-            </a>
-            <a href="mailto:${l.email || ''}?subject=${mailSubject}&body=${mailBody}" class="px-2.5 py-1 bg-blue-100 hover:bg-blue-200 text-blue-800 text-[10px] font-bold rounded-lg transition text-center whitespace-nowrap ${!l.email ? 'opacity-40 pointer-events-none' : ''}">
-              Mail Accept
-            </a>
-          </div>
-        </td>
-      `;
-      tbody.appendChild(tr);
-    });
-    lucide.createIcons();
-  } catch (err) {
-    tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-xs text-rose-700">Firestore error: ${err.message}</td></tr>`;
+    if (btn) {
+      btn.innerHTML = '<span>Try Again</span>';
+      btn.disabled = false;
+      btn.classList.remove('opacity-80', 'cursor-not-allowed');
+    }
+
+    const errorCard = document.getElementById('formErrorBanner');
+    if (errorCard) {
+      errorCard.classList.remove('hidden');
+      errorCard.textContent = 'Submission failed. Please try again.';
+      errorCard.classList.add('text-red-600');
+    }
+
+    return false;
   }
 }
+
+function closeAdmissionPopup() {
+  const popup = document.getElementById('admissionPopup');
+  if (popup) popup.classList.add('hidden');
+}
+
+function scrollSlider(sliderId, distance) {
+  const el = document.getElementById(sliderId);
+  if (el) el.scrollBy({ left: distance, behavior: 'smooth' });
+}
+
+function toggleFooterSection(listId, iconId) {
+  const list = document.getElementById(listId);
+  const icon = document.getElementById(iconId);
+  if (list && icon) {
+    const isHidden = list.classList.contains('hidden');
+    list.classList.toggle('hidden', !isHidden);
+    icon.innerText = isHidden ? '−' : '+';
+  }
+}
+
+function openCampusTourModal(title, location, desc, imgUrl) {
+  document.getElementById('modalCampusHeading').innerText = title;
+  document.getElementById('modalCampusTitle').innerText = title;
+  document.getElementById('modalCampusLoc').innerText = location;
+  document.getElementById('modalCampusDesc').innerText = desc;
+  document.getElementById('modalCampusImg').src = imgUrl;
+  document.getElementById('campusTourModal').classList.remove('hidden');
+  if (window.lucide) lucide.createIcons();
+}
+
+function closeCampusTourModal() {
+  document.getElementById('campusTourModal').classList.add('hidden');
+}
+
+function openFullGalleryModal() {
+  const grid = document.getElementById('fullGalleryGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  const photos = [
+    { title: 'Grade 4B & 4I - Class Assembly', img: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=600&q=80' },
+    { title: 'Annual Science & STEM Exhibition', img: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=600&q=80' },
+    { title: 'Pre-Primary Creative Craft Fest', img: 'images/activities.jfif' },
+    { title: 'Annual Athletic Sports Day', img: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=600&q=80' },
+    { title: 'Campus Courtyard & Learning Center', img: 'images/school building photo.jfif' },
+    { title: 'Cricket Academy & Nets Practice', img: 'images/cricket.jfif' }
+  ];
+
+  photos.forEach((p) => {
+    const item = document.createElement('div');
+    item.className = 'bg-white rounded-2xl overflow-hidden border border-[#DFCDB7] p-2.5 shadow-sm';
+    item.innerHTML = `
+      <div class="h-36 sm:h-44 rounded-xl overflow-hidden bg-slate-100">
+        <img src="${p.img}" alt="${p.title}" class="w-full h-full object-cover">
+      </div>
+      <p class="text-[11px] font-bold text-[#26170E] mt-2 line-clamp-1">${p.title}</p>
+    `;
+    grid.appendChild(item);
+  });
+
+  document.getElementById('fullGalleryModal').classList.remove('hidden');
+  if (window.lucide) lucide.createIcons();
+}
+
+function closeFullGalleryModal() {
+  document.getElementById('fullGalleryModal').classList.add('hidden');
+}
+
+const translations = {
+  en: {
+    nav_vision: 'Vision',
+    nav_faculty: 'Faculty',
+    nav_sports: 'Sports',
+    nav_bus: 'Bus Fleet',
+    nav_campus: 'Campus',
+    nav_contact: 'Contact',
+    hero_title: 'Nurturing Curious Minds into <span class="text-[#A05C26] italic">Future Leaders</span>',
+    hero_desc: 'Empowering children through holistic academic excellence, smart audio-visual learning, structured sports coaching, and strong ethical values in Khammam.',
+    vision_title: 'A Vision for Every Wonder Kid',
+    vision_desc: "Guided by Dr. A. P. J. Abdul Kalam's educational ideals, Wonder Kids High School nurtures curiosity into structured thinking and practical innovation. We ensure students leave our campus with a strong ethical foundation, practical confidence, and a love for learning."
+  },
+  te: {
+    nav_vision: 'లక్ష్యం',
+    nav_faculty: 'ఉపాధ్యాయులు',
+    nav_sports: 'క్రీడలు',
+    nav_bus: 'బస్సు సౌకర్యం',
+    nav_campus: 'క్యాంపస్',
+    nav_contact: 'సంప్రదించండి',
+    hero_title: 'భవిష్యత్ నాయకులుగా <span class="text-[#A05C26] italic">భావి భారత పౌరులు</span>',
+    hero_desc: 'ఖమ్మంలో నాణ్యమైన విద్య, డిజిటల్ స్మార్ట్ తరగతులు, క్రీడా శిక్షణ మరియు విలువ laden విద్యను అందిస్తున్నాము.',
+    vision_title: 'డాక్టర్ కలాం గారి ప్రేరణతో',
+    vision_desc: 'డాక్టర్ ఏ.పి.జె. అబ్దుల్ కలాం గారి ఆదర్శాల ప్రకారం, విద్యార్థులలో జ్ఞానపూర్వకమైన ఆలోచన, ఆచరణాత్మక నైపుణ్యం మరియు సద్గుణాలపై దృష్టి పెడతాము.'
+  }
+};
+
+function setLanguage(lang) {
+  const data = translations[lang];
+  if (!data) return;
+
+  document.querySelectorAll('[data-i18n]').forEach((el) => {
+    const key = el.getAttribute('data-i18n');
+    if (data[key]) el.innerHTML = data[key];
+  });
+
+  const enBtn = document.getElementById('langEnBtn');
+  const teBtn = document.getElementById('langTeBtn');
+
+  if (lang === 'te') {
+    teBtn.className = 'px-2 py-0.5 rounded text-[11px] font-semibold bg-[#FAF7F2] text-[#2D1B10] transition';
+    enBtn.className = 'px-2 py-0.5 rounded text-[11px] font-semibold text-[#E8DCCB] hover:text-white transition';
+  } else {
+    enBtn.className = 'px-2 py-0.5 rounded text-[11px] font-semibold bg-[#FAF7F2] text-[#2D1B10] transition';
+    teBtn.className = 'px-2 py-0.5 rounded text-[11px] font-semibold text-[#E8DCCB] hover:text-white transition';
+  }
+}
+
+function toggleChat() {
+  const modal = document.getElementById('chatModal');
+  if (!modal) return;
+  modal.classList.toggle('hidden');
+  if (!modal.classList.contains('hidden')) {
+    const input = document.getElementById('chatInput');
+    if (input) input.focus();
+  }
+}
+
+function sendQuickQuery(text) {
+  const input = document.getElementById('chatInput');
+  if (!input) return;
+  input.value = text;
+  handleChatSubmit(new Event('submit'));
+}
+
+function handleChatSubmit(e) {
+  if (e) e.preventDefault();
+  const input = document.getElementById('chatInput');
+  const query = input?.value.trim();
+  if (!query) return;
+
+  const container = document.getElementById('chatMessages');
+  const userBubble = document.createElement('div');
+  userBubble.className = 'flex justify-end';
+  userBubble.innerHTML = `
+    <div class="bg-[#663F24] text-[#FAF7F2] p-3 rounded-2xl rounded-tr-none text-xs max-w-[80%] leading-relaxed shadow-sm">
+      ${query}
+    </div>
+  `;
+  container.appendChild(userBubble);
+  input.value = '';
+  container.scrollTop = container.scrollHeight;
+
+  setTimeout(() => {
+    const aiBubble = document.createElement('div');
+    aiBubble.className = 'flex gap-2';
+    let response = 'Thank you! For specific queries, please reach out via WhatsApp (+91 88977 98251) or visit our Khammam campus.';
+    const q = query.toLowerCase();
+
+    if (q.includes('bus') || q.includes('transport') || q.includes('route') || q.includes('pickup')) {
+      response = 'Wonder Kids High School operates reliable bus routes across Mamillagudem, Wyra Road, Kaman Bazar, and all major parts of Khammam. Every bus is accompanied by a female attendant.';
+    } else if (q.includes('admission') || q.includes('fee') || q.includes('seat')) {
+      response = 'Admissions for Academic Year 2026-27 are currently open for Nursery to Grade 10. You can submit an application via the form on this page.';
+    } else if (q.includes('sport') || q.includes('cricket') || q.includes('football') || q.includes('basketball')) {
+      response = 'We prioritize physical health with daily dedicated sports coaching, including net cricket practice, full football ground drills, and a regulation basketball court.';
+    } else if (q.includes('faculty') || q.includes('teacher')) {
+      response = 'Our senior teaching faculty brings 10+ years of dedicated teaching experience in state board syllabi and foundation concepts.';
+    }
+
+    aiBubble.innerHTML = `
+      <div class="w-6 h-6 rounded-full bg-[#663F24] text-white flex items-center justify-center text-[10px] shrink-0 mt-1">AI</div>
+      <div class="bg-[#EFE5D5] p-3 rounded-2xl rounded-tl-none border border-[#DECBB4] text-[#3D2A1D] shadow-sm leading-relaxed max-w-[80%]">
+        ${response}
+      </div>
+    `;
+    container.appendChild(aiBubble);
+    container.scrollTop = container.scrollHeight;
+    if (window.lucide) lucide.createIcons();
+  }, 400);
+}
+
+window.closeAdmissionPopup = closeAdmissionPopup;
+window.scrollSlider = scrollSlider;
+window.toggleFooterSection = toggleFooterSection;
+window.openCampusTourModal = openCampusTourModal;
+window.closeCampusTourModal = closeCampusTourModal;
+window.openFullGalleryModal = openFullGalleryModal;
+window.closeFullGalleryModal = closeFullGalleryModal;
+window.setLanguage = setLanguage;
+window.toggleChat = toggleChat;
+window.sendQuickQuery = sendQuickQuery;
+window.handleChatSubmit = handleChatSubmit;
+window.handleFormSubmit = handleFormSubmit;
+window.closeSuccessModal = closeSuccessModal;
