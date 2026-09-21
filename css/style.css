@@ -1,28 +1,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Michroma&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
-html { 
-  scroll-behavior: smooth; 
+html {
+  scroll-behavior: smooth;
 }
 
-body { 
-  font-family: 'Plus Jakarta Sans', sans-serif; 
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
-.font-brand { 
-  font-family: 'Michroma', sans-serif; 
+.font-brand {
+  font-family: 'Michroma', sans-serif;
 }
 
-.font-heading { 
-  font-family: 'Playfair Display', serif; 
+.font-heading {
+  font-family: 'Playfair Display', serif;
 }
 
-.chat-scroll::-webkit-scrollbar { 
-  width: 4px; 
+.chat-scroll::-webkit-scrollbar {
+  width: 4px;
 }
 
-.chat-scroll::-webkit-scrollbar-thumb { 
-  background: #d7c9b8; 
-  border-radius: 4px; 
+.chat-scroll::-webkit-scrollbar-thumb {
+  background: #d7c9b8;
+  border-radius: 4px;
 }
 
 .carousel-snap {
@@ -31,15 +31,207 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 
-.snap-center-card { 
-  scroll-snap-align: center; 
+.snap-center-card {
+  scroll-snap-align: center;
 }
 
-.no-scrollbar::-webkit-scrollbar { 
-  display: none; 
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
-.no-scrollbar { 
-  -ms-overflow-style: none; 
-  scrollbar-width: none; 
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+:root {
+  --motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --shadow-soft: 0 18px 36px rgba(47, 30, 19, 0.08);
+  --shadow-strong: 0 24px 44px rgba(47, 30, 19, 0.12);
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a,
+input,
+select {
+  transition: transform 0.22s var(--motion-ease), box-shadow 0.22s var(--motion-ease), background-color 0.22s var(--motion-ease), border-color 0.22s var(--motion-ease), opacity 0.22s var(--motion-ease);
+}
+
+button:active,
+a:active {
+  transform: translateY(1px) scale(0.99);
+}
+
+.section-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s var(--motion-ease), transform 0.7s var(--motion-ease);
+}
+
+.section-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-principal .reveal-photo {
+  opacity: 0;
+  transform: translateX(-80px);
+  transition: transform 0.9s var(--motion-ease), opacity 0.9s var(--motion-ease);
+  transition-delay: 0.08s;
+}
+
+.reveal-principal .reveal-copy {
+  opacity: 0;
+  transform: translateX(80px);
+  transition: transform 0.9s var(--motion-ease), opacity 0.9s var(--motion-ease);
+}
+
+.reveal-principal.is-visible .reveal-photo,
+.reveal-principal.is-visible .reveal-copy {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.reveal-principal .reveal-copy:nth-of-type(1) { transition-delay: 0.14s; }
+.reveal-principal .reveal-copy:nth-of-type(2) { transition-delay: 0.18s; }
+.reveal-principal .reveal-copy:nth-of-type(3) { transition-delay: 0.22s; }
+.reveal-principal .reveal-copy:nth-of-type(4) { transition-delay: 0.26s; }
+
+.snap-center-card,
+#campusSlider > div,
+#facultySlider > div,
+#sportsSlider > div,
+#achievementSlider > div,
+#gallerySlider > div {
+  transition: transform 0.28s var(--motion-ease), box-shadow 0.28s var(--motion-ease), filter 0.28s var(--motion-ease);
+}
+
+.snap-center-card:hover,
+#campusSlider > div:hover,
+#facultySlider > div:hover,
+#sportsSlider > div:hover,
+#achievementSlider > div:hover,
+#gallerySlider > div:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-soft);
+}
+
+.snap-center-card img,
+#campusSlider > div img,
+#facultySlider > div img,
+#sportsSlider > div img,
+#achievementSlider > div img,
+#gallerySlider > div img {
+  transition: transform 0.36s var(--motion-ease);
+}
+
+.snap-center-card:hover img,
+#campusSlider > div:hover img,
+#facultySlider > div:hover img,
+#sportsSlider > div:hover img,
+#achievementSlider > div:hover img,
+#gallerySlider > div:hover img {
+  transform: scale(1.02);
+}
+
+.success-checkmark-wrap {
+  width: 82px;
+  height: 82px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #efe4d2, #f4f0ea);
+  box-shadow: 0 12px 28px rgba(102, 63, 36, 0.12);
+}
+
+.success-checkmark {
+  width: 52px;
+  height: 52px;
+  display: block;
+}
+
+.success-ring {
+  stroke: #A05C26;
+  stroke-width: 3;
+  fill: none;
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  animation: ringIn 0.6s ease forwards;
+}
+
+.success-path {
+  stroke: #A05C26;
+  stroke-width: 4;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 140;
+  stroke-dashoffset: 140;
+  animation: pathIn 0.55s ease 0.25s forwards;
+}
+
+.success-confetti {
+  z-index: -1;
+}
+
+.success-confetti span {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  opacity: 0;
+  animation: confettiBurst 0.8s ease-out forwards;
+}
+
+@keyframes ringIn {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes pathIn {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes confettiBurst {
+  0% {
+    transform: translate(0, 0) scale(0.7);
+    opacity: 0;
+  }
+  20% { opacity: 1; }
+  100% {
+    transform: translate(var(--tx), var(--ty)) scale(1);
+    opacity: 0;
+  }
+}
+
+#admissionForm.form-invalid {
+  animation: formShake 0.32s ease;
+}
+
+@keyframes formShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  50% { transform: translateX(4px); }
+  75% { transform: translateX(-2px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .section-reveal,
+  .reveal-principal .reveal-photo,
+  .reveal-principal .reveal-copy {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
