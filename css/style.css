@@ -66,32 +66,44 @@ a:active {
   transform: translateY(1px) scale(0.99);
 }
 
+/* Sections remain visible if JavaScript is unavailable or has a runtime error. */
 .section-reveal {
+  opacity: 1;
+  transform: none;
+}
+
+body.motion-ready .section-reveal {
   opacity: 0;
   transform: translateY(24px);
   transition: opacity 0.7s var(--motion-ease), transform 0.7s var(--motion-ease);
 }
 
-.section-reveal.is-visible {
+body.motion-ready .section-reveal.is-visible {
   opacity: 1;
   transform: translateY(0);
 }
 
-.reveal-principal .reveal-photo {
+.reveal-principal .reveal-photo,
+.reveal-principal .reveal-copy {
+  opacity: 1;
+  transform: none;
+}
+
+body.motion-ready .reveal-principal .reveal-photo {
   opacity: 0;
   transform: translateX(-80px);
   transition: transform 0.9s var(--motion-ease), opacity 0.9s var(--motion-ease);
   transition-delay: 0.08s;
 }
 
-.reveal-principal .reveal-copy {
+body.motion-ready .reveal-principal .reveal-copy {
   opacity: 0;
   transform: translateX(80px);
   transition: transform 0.9s var(--motion-ease), opacity 0.9s var(--motion-ease);
 }
 
-.reveal-principal.is-visible .reveal-photo,
-.reveal-principal.is-visible .reveal-copy {
+body.motion-ready .reveal-principal.is-visible .reveal-photo,
+body.motion-ready .reveal-principal.is-visible .reveal-copy {
   opacity: 1;
   transform: translateX(0);
 }
@@ -197,15 +209,9 @@ a:active {
 }
 
 @keyframes confettiBurst {
-  0% {
-    transform: translate(0, 0) scale(0.7);
-    opacity: 0;
-  }
+  0% { transform: translate(0, 0) scale(0.7); opacity: 0; }
   20% { opacity: 1; }
-  100% {
-    transform: translate(var(--tx), var(--ty)) scale(1);
-    opacity: 0;
-  }
+  100% { transform: translate(var(--tx), var(--ty)) scale(1); opacity: 0; }
 }
 
 #admissionForm.form-invalid {
@@ -230,7 +236,10 @@ a:active {
 
   .section-reveal,
   .reveal-principal .reveal-photo,
-  .reveal-principal .reveal-copy {
+  .reveal-principal .reveal-copy,
+  body.motion-ready .section-reveal,
+  body.motion-ready .reveal-principal .reveal-photo,
+  body.motion-ready .reveal-principal .reveal-copy {
     opacity: 1 !important;
     transform: none !important;
   }
